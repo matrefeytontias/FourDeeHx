@@ -15,20 +15,30 @@ enum Rotation4D
 @:forward(toArray)
 abstract Matrix5(Vector<Float>)
 {
-	inline public function new(?e:Array<Float>)
+	@:from
+	static inline public function fromVector(v:Vector<Float>)
 	{
-		this = new Vector<Float>(25);
-		if(e != null)
+		return new Matrix5(v);
+	}
+	
+	inline public function new(?v:Vector<Float>, ?e:Array<Float>)
+	{
+		if(v == null)
 		{
-			if(e.length != 25)
-				throw "new Matrix5: elements array must contain 25 values";
-			for(k in 0 ... 25)
-				this[k] = e[k];
+			this = new Vector<Float>(25);
+			if(e == null)
+				identity();
+			else
+			{
+				if(e.length != 25)
+					throw "new Matrix5: elements array must contain 25 values";
+				for(k in 0 ... 25)
+					v[k] = e[k];
+			}
 		}
-		else
-		{
-			identity();
-		}
+		else if(v.length == 25)
+			this = v;
+		else throw "new Matrix5: initialization vector must contain 25 values";
 	}
 	
 	@:op(A + B) inline public function add(b:Matrix5) : Matrix5
@@ -63,16 +73,17 @@ abstract Matrix5(Vector<Float>)
 		return this.get(i);
 	}
 	
-	public function identity()
+	public function identity() : Matrix5
 	{
 		this[0] = this[6] = this[12] = this[18] = this[24] = 1.;
 		this[1] = this[2] = this[3] = this[4] = this[5] = 0.;
 		this[7] = this[8] = this[9] = this[10] = this[11] = 0.;
 		this[13] = this[14] = this[15] = this[16] = this[17] = 0.;
 		this[19] = this[20] = this[21] = this[22] = this[23] = 0.;
+		return this;
 	}
 	
-	public function makeRotation(r:Rotation4D, theta:Float)
+	public function makeRotation(r:Rotation4D, theta:Float) : Matrix5
 	{
 		identity();
 		var c = Math.cos(theta), s = Math.sin(theta);
@@ -93,9 +104,9 @@ abstract Matrix5(Vector<Float>)
 				i = 2; j = 3;
 		}
 		this[i * 6] = this[j * 6] = c;
-		this[j * 5 + i] = -s;
-		this[i * 5 + j] = s;
-		trace(this);
+		this[j * 5 + i] = s;
+		this[i * 5 + j] = -s;
+		return this;
 	}
 	
 	@:op(A * B) public function multiply(b:Matrix5) : Matrix5
@@ -107,24 +118,32 @@ abstract Matrix5(Vector<Float>)
 			{
 				var cell:Float = 0.;
 				for(k in 0 ... 5)
-				{
 					cell += this[i * 5 + k] * b[k * 5 + j];
-				}
 				r[i * 5 + j] = cell;
 			}
 		}
 		return r;
 	}
 	
-	inline public function negate()
+	inline public function negate() : Matrix5
 	{
 		for(k in 0 ... 25)
 			this[k] = -this[k];
+		return this;
 	}
 	
 	@:op(A * B) inline static public function postMultiply(v:Vector4, m:Matrix5) : Vector4
 	{
 		return m.transposed() * v;
+	}
+	
+	inline public function scale(x = 1., y = 1., z = 1., w = 1.) : Matrix5
+	{
+		this[0] *= x;
+		this[6] *= y;
+		this[12] *= z;
+		this[18] *= w;
+		return this;
 	}
 	
 	@:arrayAccess inline public function set(index:Int, v:Float) : Float
@@ -146,7 +165,28 @@ abstract Matrix5(Vector<Float>)
 		return r;
 	}
 	
-	public function transpose()
+	inline public function translate(x = 0., y = 0., z = 0., w = 0.) : Matrix5
+	{
+		this[4] += x;
+		this[9] += y;
+		this[14] += z;
+		this[19] += w;
+		return this;
+	}
+	
+	@:op(A + B) inline public function translateVec(v:Vector4) : Matrix5
+	{
+		trace("Translating matrix by " + v);
+		return translate(v.x, v.y, v.z, v.w);
+	}
+	
+	@:op(A - B) inline public function translateMinusVec(v:Vector4) : Matrix5
+	{
+		trace("Subtracting " + v + " to matrix");
+		return translate(-v.x, -v.y, -v.z, -v.w);
+	}
+	
+	public function transpose() : Matrix5
 	{
 		var t:Float;
 		for(i in 0 ... 5)
@@ -158,6 +198,7 @@ abstract Matrix5(Vector<Float>)
 				this[j * 5 + i] = t;
 			}
 		}
+		return this;
 	}
 	
 	public function transposed() : Matrix5
