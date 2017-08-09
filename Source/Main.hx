@@ -1,11 +1,11 @@
 import fourDee.Application;
-import fourDee.math.*;
+import fourDee.objects.Mesh4D;
 
 import lime.ui.Window;
 
 class Main extends Application
 {
-	private var hcube:Object4D;
+	private var hcube:Mesh4D;
 	
 	public function new()
 	{
