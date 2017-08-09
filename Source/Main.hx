@@ -22,9 +22,9 @@ class Main extends Application
 		space4D = new Space4D(window.width, window.height);
 		
 		// Screen width, screen width, fov in degrees
-		space4D.attachCamera(new PerspectiveCamera(90));
+		space4D.attachCamera(new PerspectiveCamera(90, window.width / window.height));
 		
-		hcube = new Mesh4D(new BoxGeometry4D(1, 1, 1, 1), new SolidMaterial(0xff0000));
+		hcube = new Box(1, 1, 1, new SolidMaterial(0xff0000));
 		space4D.add(hcube);
 		hcube.position.z = -5;
 	}
