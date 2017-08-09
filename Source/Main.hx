@@ -1,5 +1,9 @@
 import fourDee.Application;
+import fourDee.Space4D;
+import fourDee.geometries.BoxGeometry4D;
+import fourDee.materials.SolidMaterial;
 import fourDee.objects.Mesh4D;
+import fourDee.render.PerspectiveCamera;
 
 import lime.ui.Window;
 
