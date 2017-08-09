@@ -1,4 +1,4 @@
-package fourDee.math.Vector4;
+package fourDee.math;
 
 class Vector4
 {
@@ -35,7 +35,7 @@ class Vector4
 	inline public function add(a:Vector4) : Vector4
 	{
 		return new Vector4(x + a.x, y + a.y, z + a.z, w + a.w);
-	
+	}
 	
 	inline static public function angleBetween(a:Vector4, b:Vector4) : Float
 	{

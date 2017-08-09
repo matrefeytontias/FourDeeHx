@@ -12,10 +12,10 @@ enum Rotation4D
 	ZW;
 }
 
-@:forward(get, set, toArray)
+@:forward(toArray)
 abstract Matrix5(Vector<Float>)
 {
-	public function new(?e:Array<Float>)
+	inline public function new(?e:Array<Float>)
 	{
 		this = new Vector<Float>(25);
 		if(e != null)
@@ -31,7 +31,7 @@ abstract Matrix5(Vector<Float>)
 		}
 	}
 	
-	@:op(A + B) public function add(b:Matrix5) : Matrix5
+	@:op(A + B) inline public function add(b:Matrix5) : Matrix5
 	{
 		var r = new Matrix5();
 		for(k in 0 ... 25)
@@ -41,13 +41,14 @@ abstract Matrix5(Vector<Float>)
 	
 	@:op(A * B) public function applyToVec4(v:Vector4) : Vector4
 	{
+		trace("Applying to Vec4");
 		var temp = new Vector4();
 		// Basically a multiplication by a Vector5 with t = 1
-		temp.x = this[0] * temp.x + this[1] * temp.y + this[2] * temp.z + this[3] * temp.w + this[4];
-		temp.y = this[5] * temp.x + this[6] * temp.y + this[7] * temp.z + this[8] * temp.w + this[9];
-		temp.z = this[10] * temp.x + this[11] * temp.y + this[12] * temp.z + this[13] * temp.w + this[14];
-		temp.w = this[15] * temp.x + this[16] * temp.y + this[17] * temp.z + this[18] * temp.w + this[19];
-		var t = this[20] * temp.x + this[21] * temp.y + this[22] * temp.z + this[23] * temp.w + this[24];
+		temp.x = this[0] * v.x + this[1] * v.y + this[2] * v.z + this[3] * v.w + this[4];
+		temp.y = this[5] * v.x + this[6] * v.y + this[7] * v.z + this[8] * v.w + this[9];
+		temp.z = this[10] * v.x + this[11] * v.y + this[12] * v.z + this[13] * v.w + this[14];
+		temp.w = this[15] * v.x + this[16] * v.y + this[17] * v.z + this[18] * v.w + this[19];
+		var t = this[20] * v.x + this[21] * v.y + this[22] * v.z + this[23] * v.w + this[24];
 		temp.scaleBy(1 / t);
 		return temp;
 	}
@@ -55,6 +56,11 @@ abstract Matrix5(Vector<Float>)
 	public function clone() : Matrix5
 	{
 		return new Matrix5(this.toArray());
+	}
+	
+	@:arrayAccess public function get(i:Int) : Float
+	{
+		return this.get(i);
 	}
 	
 	public function identity()
@@ -87,8 +93,9 @@ abstract Matrix5(Vector<Float>)
 				i = 2; j = 3;
 		}
 		this[i * 6] = this[j * 6] = c;
-		this[i * 5 + j] = s;
 		this[j * 5 + i] = -s;
+		this[i * 5 + j] = s;
+		trace(this);
 	}
 	
 	@:op(A * B) public function multiply(b:Matrix5) : Matrix5
@@ -109,15 +116,34 @@ abstract Matrix5(Vector<Float>)
 		return r;
 	}
 	
-	public function negate()
+	inline public function negate()
 	{
 		for(k in 0 ... 25)
 			this[k] = -this[k];
 	}
 	
-	inline public function postMultiply(v:Vector4) : Vector4
+	@:op(A * B) inline static public function postMultiply(v:Vector4, m:Matrix5) : Vector4
 	{
-		return transposed() * v;
+		return m.transposed() * v;
+	}
+	
+	@:arrayAccess inline public function set(index:Int, v:Float) : Float
+	{
+		return this[index] = v;
+	}
+	
+	inline public function toString() : String
+	{
+		var r = "[ ";
+		for(i in 0 ... 5)
+		{
+			for(j in 0 ... 5)
+			{
+				r += this[i * 5 + j] + ", ";
+			}
+			r += i < 4 ? "\n" : "]";
+		}
+		return r;
 	}
 	
 	public function transpose()
