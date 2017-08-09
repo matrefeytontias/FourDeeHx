@@ -1,6 +1,6 @@
 package fourDee;
 
-class Scene
+class Space4D
 {
 	public function new()
 	{
