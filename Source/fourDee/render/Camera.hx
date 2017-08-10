@@ -1,5 +1,6 @@
 package fourDee.render;
 
+import fourDee.math.Euler3;
 import fourDee.math.Intersector;
 
 import lime.math.Matrix4;
@@ -23,6 +24,7 @@ class Camera extends Object4D
 	
 	public var rotation3D:Euler3 = new Euler3();
 	
+	public var pmat:Matrix4 = new Matrix4();
 	public var matrix3D:Matrix4;
 	
 	public function new()
@@ -40,7 +42,7 @@ class Camera extends Object4D
 	private function getMatrix3D() : Matrix4
 	{
 		var m = rotation3D.makeMatrix();
-		m.prependScale(scale.x, scale.y, scale.z);
+		m.appendScale(scale.x, scale.y, scale.z);
 		return m;
 	}
 }
