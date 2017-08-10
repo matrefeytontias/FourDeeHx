@@ -2,6 +2,7 @@ package fourDee;
 
 import fourDee.math.Euler4;
 import fourDee.math.Vector4;
+import fourDee.render.Camera;
 
 class Object4D
 {
@@ -18,7 +19,7 @@ class Object4D
 	{
 	}
 	
-	public function render(camera:Camera)
+	public function render(gl:lime.graphics.GLRenderContext, camera:Camera)
 	{
 	}
 }

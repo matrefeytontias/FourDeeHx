@@ -13,10 +13,9 @@ class Space4D
 	public var renderHeight:Int;
 	
 	private var objects:Array<Object4D> = new Array<Object4D>();
-	private var camera:Camera;
 	
-	@:allow(fourDee.Application)
-	private var gl:GLRenderContext;
+	public var camera:Camera;
+	public var gl:GLRenderContext;
 	
 	public function new(w:Int, h:Int, x:Int = 0, y:Int = 0)
 	{
@@ -24,13 +23,12 @@ class Space4D
 		renderHeight = h;
 		renderX = x;
 		renderY = y;
-		GL.enable(GL.SCISSOR_TEST);
-		updateScreenRegion();
+		// GL.enable(GL.SCISSOR_TEST);
 	}
 	
 	inline public function updateScreenRegion()
 	{
-		GL.scissor(renderX, renderY, renderWidth, renderHeight);
+		// GL.scissor(renderX, renderY, renderWidth, renderHeight);
 	}
 	
 	inline public function add(o:Object4D)
@@ -48,9 +46,14 @@ class Space4D
 		camera = c;
 	}
 	
-	inline public function render()
+	inline public function update(dt:Int)
+	{
+		camera.update(dt);
+	}
+	
+	inline public function render(gl)
 	{
 		for(o in objects)
-			o.render(camera);
+			o.render(gl, camera);
 	}
 }
