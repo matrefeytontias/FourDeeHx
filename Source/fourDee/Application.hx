@@ -57,6 +57,7 @@ class Application extends lime.app.Application
 		space4D.update(dt);
 	}
 	
+	@:final
 	override public function render(r:Renderer)
 	{
 		super.render(r);
