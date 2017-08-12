@@ -51,7 +51,6 @@ abstract Matrix5(Vector<Float>)
 	
 	@:op(A * B) public function applyToVec4(v:Vector4) : Vector4
 	{
-		trace("Applying to Vec4");
 		var temp = new Vector4();
 		// Basically a multiplication by a Vector5 with t = 1
 		temp.x = this[0] * v.x + this[1] * v.y + this[2] * v.z + this[3] * v.w + this[4];
@@ -176,13 +175,11 @@ abstract Matrix5(Vector<Float>)
 	
 	@:op(A + B) inline public function translateVec(v:Vector4) : Matrix5
 	{
-		trace("Translating matrix by " + v);
 		return translate(v.x, v.y, v.z, v.w);
 	}
 	
 	@:op(A - B) inline public function translateMinusVec(v:Vector4) : Matrix5
 	{
-		trace("Subtracting " + v + " to matrix");
 		return translate(-v.x, -v.y, -v.z, -v.w);
 	}
 	

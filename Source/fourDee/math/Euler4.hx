@@ -47,11 +47,10 @@ class Euler4
 		{
 			var rot = order[n - i];
 			var theta = getRot(rot);
-			trace(theta);
 			if(theta != 0.)
 				m = m * r.makeRotation(rot, theta);
 		}
 		
-		return m + (center.subtract(m * center));
+		return m + (center.sub(m * center));
 	}
 }

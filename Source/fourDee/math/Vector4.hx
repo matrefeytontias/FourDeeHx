@@ -47,20 +47,22 @@ class Vector4
 		return new Vector4(x, y, z, w);
 	}
 	
-	inline public function copyFrom(a:Vector4)
+	inline public function copyFrom(a:Vector4) : Vector4
 	{
 		x = a.x;
 		y = a.y;
 		z = a.z;
 		w = a.w;
+		return this;
 	}
 	
-	inline public function decrementBy(a:Vector4)
+	inline public function decrementBy(a:Vector4) : Vector4
 	{
 		x -= a.x;
 		y -= a.y;
 		z -= a.z;
 		w -= a.w;
+		return this;
 	}
 	
 	inline static public function distance(a:Vector4, b:Vector4) : Float
@@ -83,12 +85,13 @@ class Vector4
 		return x == a.x && y == a.y && z == a.z && w == a.w;
 	}
 	
-	inline public function incrementBy(a:Vector4)
+	inline public function incrementBy(a:Vector4) : Vector4
 	{
 		x += a.x;
 		y += a.y;
 		z += a.z;
 		w += a.w;
+		return this;
 	}
 	
 	inline public function nearEquals(a:Vector4, epsilon:Float) : Bool
@@ -99,12 +102,13 @@ class Vector4
 			&& Math.abs(w - a.w) < epsilon;
 	}
 	
-	inline public function negate()
+	inline public function negate() : Vector4
 	{
 		x = -x;
 		y = -y;
 		z = -z;
 		w = -w;
+		return this;
 	}
 	
 	inline public function normalize() : Float
@@ -120,23 +124,25 @@ class Vector4
 		return l;
 	}
 	
-	inline public function scaleBy(v:Float)
+	inline public function scaleBy(v:Float) : Vector4
 	{
 		x *= v;
 		y *= v;
 		z *= v;
 		w *= v;
+		return this;
 	}
 	
-	inline public function setTo(x:Float, y:Float, z:Float, w:Float)
+	inline public function setTo(x:Float, y:Float, z:Float, w:Float) : Vector4
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.w = w;
+		return this;
 	}
 	
-	inline public function subtract(a:Vector4) : Vector4
+	inline public function sub(a:Vector4) : Vector4
 	{
 		return new Vector4(x - a.x, y - a.y, z - a.z, w - a.w);
 	}
