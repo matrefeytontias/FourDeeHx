@@ -1,6 +1,7 @@
 package fourDee;
 
 import fourDee.render.Camera;
+import fourDee.render.ObjectSlice3D;
 
 import lime.graphics.opengl.GL;
 import lime.graphics.GLRenderContext;
@@ -13,6 +14,7 @@ class Space4D
 	public var renderHeight:Int;
 	
 	private var objects:Array<Object4D> = new Array<Object4D>();
+	private var slices:Array<ObjectSlice3D> = new Array<ObjectSlice3D>();
 	
 	public var camera:Camera;
 	public var gl:GLRenderContext;
@@ -51,9 +53,22 @@ class Space4D
 		camera.update(dt);
 	}
 	
+	/**
+	  * Renders all the 4D objects in the space.
+	  * 4D rendering is in two major steps :
+	  * - intersector operation : the intersector calculates the
+	  *   3D slices of the 4D objects and arranges them into 3D triangles
+	  *   for the renderer to draw. The intersector is attached to the
+	  *   camera
+	  * - 3D rendering : actual rendering of the 3D slices
+	  */
 	inline public function render(gl)
 	{
+		for(k in 0 ... slices.length)
+			slices.pop();
 		for(o in objects)
-			o.render(gl, camera);
+			camera.intersect(o, slices);
+		for(s in slices)
+			s.render(gl, camera);
 	}
 }

@@ -1,10 +1,10 @@
 package fourDee.render;
 
 /**
-  * Represents a 4-dimensional face, that is,
+  * Represents a minimal 4-dimensional cell, that is,
   * a tetrahedron.
   */
-class Face4
+class Cell4
 {
 	public var a:Int;
 	public var b:Int;
