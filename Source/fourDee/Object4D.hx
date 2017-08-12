@@ -9,6 +9,11 @@ class Object4D
 	public var position:Vector4 = new Vector4();
 	public var rotation:Euler4 = new Euler4();
 	public var scale:Vector4 = new Vector4(1., 1., 1., 1.);
+	public var renderable(get, never):Bool;
+	private function get_renderable() : Bool
+	{
+		return Reflect.hasField(this, "geometry") && Reflect.hasField(this, "material") != null;
+	}
 	
 	private function new()
 	{
