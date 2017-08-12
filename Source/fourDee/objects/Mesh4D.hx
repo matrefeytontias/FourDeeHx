@@ -7,12 +7,8 @@ class Mesh4D extends Object4D
 	
 	public function new(g:Geometry4D, m:Material)
 	{
+		super();
 		geometry = g;
 		material = m;
-	}
-	
-	override public function render(camera:Camera)
-	{
-		trace("Insert render process here");
 	}
 }

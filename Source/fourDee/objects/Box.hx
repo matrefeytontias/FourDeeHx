@@ -3,6 +3,7 @@ package fourDee.objects;
 import fourDee.Application;
 import fourDee.Material;
 import fourDee.Object4D;
+import fourDee.math.Euler3;
 import fourDee.render.Camera;
 
 import lime.graphics.opengl.GL;
@@ -13,7 +14,7 @@ import lime.utils.Float32Array;
 using fourDee.objects.Box;
 
 class Box extends Object4D
-{
+{/*
 	static private var vertices = [ -1 / 2, -1 / 2, 1 / 2,
 		1 / 2, -1 / 2, 1 / 2,
 		1 / 2, 1 / 2, 1 / 2,
@@ -44,6 +45,7 @@ class Box extends Object4D
 	public var height:Float;
 	public var depth:Float;
 	public var material:Material;
+	public var rotation3D:Euler3 = new Euler3();
 	
 	private var glBuffer:GLBuffer;
 	
@@ -88,4 +90,4 @@ class Box extends Object4D
 		gl.drawArrays(GL.TRIANGLES, 0, 12 * 3);
 		material.cleanupRender(gl);
 	}
-}
+*/}
