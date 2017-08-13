@@ -37,7 +37,8 @@ class ObjectSlice3D
 			var v1 = vertices[f.a],
 				v2 = vertices[f.b],
 				v3 = vertices[f.c];
-			var n = v2.subtract(v1).crossProduct(v3.subtract(v2));
+			var n = v2.subtract(v1).crossProduct(v3.subtract(v1));
+			n.normalize();
 			temp.pushVec3(v1);
 			temp.pushVec3(n);
 			temp.pushVec3(v2);
