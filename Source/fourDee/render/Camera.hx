@@ -76,19 +76,27 @@ class Camera extends Object4D
 					pushDirect(new Face3(0 + offset, 1 + offset, 2 + offset), centroid, r);
 				if(inter.length == 4)
 				{
-					pushDirect(new Face3(0 + offset, 2 + offset, 3 + offset), centroid, r);
-					
-					// Check for tetrahedron
+					// Reorder vertices to have minimum successive angle difference
 					var v1 = r.vertices[offset],
 						v2 = r.vertices[offset + 1],
 						v3 = r.vertices[offset + 2],
 						v4 = r.vertices[offset + 3];
-					var n = v2.subtract(v1).crossProduct(v3.subtract(v2));
+					var v2v1 = v2.subtract(v1), v3v2 = v3.subtract(v2);
+					if(Vector3.angleBetween(v2v1, v3v2) > Vector3.angleBetween(v2v1, v4.subtract(v2)))
+					{
+						r.vertices[offset+2] = v4;
+						r.vertices[offset+3] = v3;
+						v3 = v4;
+					}
+					pushDirect(new Face3(0 + offset, 2 + offset, 3 + offset), centroid, r);
+					
+					// Check for tetrahedron
+					var n = v2.subtract(v1).crossProduct(v3.subtract(v1));
 					// Tetrahedron
 					if(n.dotProduct(v4.subtract(v3)) != 0)
 					{
-						pushDirect(new Face3(0 + offset, 1 + offset, 3 + offset), centroid, r);
-						pushDirect(new Face3(1 + offset, 2 + offset, 3 + offset), centroid, r);
+						pushDirect(new Face3(0 + offset, 1 + offset, 3 + offset), centroid, r, n);
+						pushDirect(new Face3(1 + offset, 2 + offset, 3 + offset), centroid, r, n);
 					}
 				}
 			}
@@ -102,7 +110,7 @@ class Camera extends Object4D
 		var v1 = obj.vertices[f.a],
 			v2 = obj.vertices[f.b],
 			v3 = obj.vertices[f.c];
-		var n = _n == null ? v2.subtract(v1).crossProduct(v3.subtract(v2)) : _n;
+		var n = _n == null ? v2.subtract(v1).crossProduct(v3.subtract(v1)) : _n;
 		if(n.dotProduct(centroid.subtract(v1)) < 0)
 		{
 			// Fast integer swap
