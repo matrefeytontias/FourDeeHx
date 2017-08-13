@@ -23,8 +23,10 @@ class Material
 		program = GLUtils.createProgram(vert, frag);
 		glAPosition = GL.getAttribLocation(program, "aPosition");
 		glANormal = GL.getAttribLocation(program, "aNormal");
-		GL.enableVertexAttribArray(glAPosition);
-		GL.enableVertexAttribArray(glANormal);
+		if(glAPosition >= 0)
+			GL.enableVertexAttribArray(glAPosition);
+		if(glANormal >= 0)
+			GL.enableVertexAttribArray(glANormal);
 		glUMat = GL.getUniformLocation(program, "mat");
 	}
 	
@@ -32,8 +34,10 @@ class Material
 	{
 		gl.useProgram(program);
 		gl.bindBuffer(gl.ARRAY_BUFFER, glBuffer);
-		gl.vertexAttribPointer(glAPosition, 3, gl.FLOAT, false, 6 * 4, 0);
-		gl.vertexAttribPointer(glANormal, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
+		if(glAPosition >= 0)
+			gl.vertexAttribPointer(glAPosition, 3, gl.FLOAT, false, 6 * 4, 0);
+		if(glANormal >= 0)
+			gl.vertexAttribPointer(glANormal, 3, gl.FLOAT, false, 6 * 4, 3 * 4);
 		var mat = camera.matrix3D.clone();
 		mat.append(camera.pmat);
 		gl.uniformMatrix4fv(glUMat, 1, false, mat);

@@ -53,7 +53,7 @@ class LambertMaterial extends Material
 	private var glUColor:GLUniformLocation;
 	private var glUDiffuse:GLUniformLocation;
 	
-	public function new(c:Int, d:Float)
+	public function new(c:Int, d:Float = 1.)
 	{
 		super(lambertVert, lambertFrag);
 		color = c;
