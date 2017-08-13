@@ -55,6 +55,13 @@ class Camera extends Object4D
 		{
 			var r = new ObjectSlice3D(cast(Reflect.field(obj, "material"), Material));
 			var geom:Geometry4D = Reflect.field(obj, "geometry");
+			var centroid4 = new Vector4();
+			for(v in geom.vertices)
+			{
+				centroid4.incrementBy(v);
+			}
+			centroid4.scaleBy(1 / geom.vertices.length);
+			var centroid = intersector.switchBase(centroid4);
 			var v:Array<Vector4> = geom.vertices;
 			var m = obj.rotation.makeMatrix();
 			var o = obj.position;
@@ -64,7 +71,6 @@ class Camera extends Object4D
 					v2 = (m * v[f.b]).add(o),
 					v3 = (m * v[f.c]).add(o),
 					v4 = (m * v[f.d]).add(o);
-				var centroid = intersector.switchBase(v1.add(v2).add(v3).add(v4).scaleBy(1 / 4));
 				
 				var inter = intersector.intersectTetra(v1, v2, v3, v4);
 				var offset = r.vertices.length;
@@ -113,10 +119,9 @@ class Camera extends Object4D
 		var n = _n == null ? v2.subtract(v1).crossProduct(v3.subtract(v1)) : _n;
 		if(n.dotProduct(centroid.subtract(v1)) < 0)
 		{
-			// Fast integer swap
-			f.b = f.b ^ f.c;
-			f.c = f.b ^ f.c;
-			f.b = f.b ^ f.c;
+			var t = f.b;
+			f.b = f.c;
+			f.c = t;
 		}
 		obj.faces.push(f);
 	}
