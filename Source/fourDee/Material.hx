@@ -11,8 +11,16 @@ import lime.math.Matrix4;
 import lime.math.Vector4;
 import lime.utils.GLUtils;
 
+/**
+  * Base class for the rendering of 3D slices of
+  * 4D objects. This describes how the triangles
+  * resulting from the slicing are drawn.
+  */
 class Material
 {
+	// Material expects vertex attributes for
+	// position and normal by default. Geometries
+	// are always expected to provide them.
 	private var program:GLProgram;
 	private var glAPosition:Int;
 	private var glANormal:Int;
@@ -30,6 +38,13 @@ class Material
 		glUMat = GL.getUniformLocation(program, "mat");
 	}
 	
+	/**
+	  * Setup the shader program for rendering a particular object slice.
+	  * @param	gl			target OpenGL rendering context
+	  * @param	obj			object slice being rendered
+	  * @param	glBuffer	buffered data of the current object slice
+	  * @param	camera		active Camera object
+	  */
 	public function setupRender(gl:lime.graphics.GLRenderContext, obj:ObjectSlice3D, glBuffer:GLBuffer, camera:Camera)
 	{
 		gl.useProgram(program);
@@ -43,6 +58,10 @@ class Material
 		gl.uniformMatrix4fv(glUMat, 1, false, mat);
 	}
 	
+	/**
+	  * Performs any necessary cleaning after a render pass.
+	  * @param	gl	target OpenGL rendering context
+	  */
 	public function cleanupRender(gl:lime.graphics.GLRenderContext)
 	{
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);

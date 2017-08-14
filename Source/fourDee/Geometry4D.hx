@@ -1,14 +1,24 @@
 package fourDee;
 
+import fourDee.math.Vector3;
 import fourDee.math.Vector4;
 import fourDee.render.Face3;
 import fourDee.render.Cell4;
 
-typedef Vector3 = lime.math.Vector4;
-
+/**
+  * Base class for 4D geometry. Exposes a set of vertices
+  * and "3D faces", called cells. Every cell is a tetrahedron.
+  */
 class Geometry4D
 {
+	/**
+	  * 4D vertices of the geometry.
+	  */
 	public var vertices:Array<Vector4>;
+	/**
+	  * Cells ("3D faces") of the geometry. Cells are always
+	  * tetrahedric.
+	  */
 	public var cells:Array<Cell4>;
 	
 	private function new(?v:Array<Vector4>, ?c:Array<Cell4>)
@@ -17,6 +27,15 @@ class Geometry4D
 		cells = c == null ? new Array<Cell4>() : c;
 	}
 	
+	/**
+	  * Fills the geometry using the given 3D geometry data.
+	  * The calculation carried on is an extrusion of the 3D
+	  * geometry in both directions along the W axis with the
+	  * given amplitude.
+	  * @param	vertices3D	array of Vector3 describing the 3D geometry
+	  * @param	faces3D		array of Face3 describing the 3D geometry
+	  * @param	duth		amplitude of the extrusion along the W axis
+	  */
 	public function from3D(vertices3D:Array<Vector3>, faces3D:Array<Face3>, duth:Float)
 	{
 		var extraVertexOffset = vertices3D.length;
@@ -24,7 +43,7 @@ class Geometry4D
 		var v4 = new Vector4();
 		for(i in 0 ... vertices3D.length)
 		{
-			// Copy the "normal" vectors
+			// Copy the original vectors
 			var v = vertices3D[i];
 			v4.setTo(v.x, v.y, v.z, -d);
 			vertices.push(v4.clone());
@@ -36,7 +55,7 @@ class Geometry4D
 			v4.w = d;
 			vertices.push(v4.clone());
 		}
-		// Make a 4D prism by extruding triangles along w
+		// Build a 4D prism by extruding triangles along w
 		// A prism is made of 3 tetrahedra ; those are the 4D model's cells
 		for(f3 in 0 ... faces3D.length)
 		{

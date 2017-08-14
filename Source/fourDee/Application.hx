@@ -4,8 +4,15 @@ import lime.graphics.Renderer;
 import lime.graphics.GLRenderContext;
 import lime.ui.Window;
 
+/**
+  * Base class of all FourDee applications. Your main class must
+  * extend this.
+  */
 class Application extends lime.app.Application
 {
+	/**
+	  * Currently active 4D space.
+	  */
 	public var space4D(default, set):Space4D = null;
 	private function set_space4D(v:Space4D) : Space4D
 	{
@@ -50,7 +57,6 @@ class Application extends lime.app.Application
 		}
 	}
 	
-	// Override this
 	override public function update(dt:Int)
 	{
 		super.update(dt);

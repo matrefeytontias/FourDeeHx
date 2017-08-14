@@ -6,8 +6,16 @@ import fourDee.render.ObjectSlice3D;
 import lime.graphics.opengl.GL;
 import lime.graphics.GLRenderContext;
 
+/**
+  * Describes a 4D space and all the 4D objects
+  * in it. Takes care of the rendering of said
+  * 4D objects on a specific part of the screen.
+  */
 class Space4D
 {
+	/**
+	  * TODO
+	  */
 	public var renderX:Int = 0;
 	public var renderY:Int = 0;
 	public var renderWidth:Int;
@@ -16,9 +24,14 @@ class Space4D
 	private var objects:Array<Object4D> = new Array<Object4D>();
 	private var slices:Array<ObjectSlice3D> = new Array<ObjectSlice3D>();
 	
-	public var camera:Camera;
-	public var gl:GLRenderContext;
+	private var camera:Camera;
 	
+	/**
+	  * @param	w	width in pixels of the viewport
+	  * @param	h	height in pixels of the viewport
+	  * @param	x	x coordinate in pixels of the top-left corner of the viewport
+	  * @param	y	y coordinate in pixels of the top-left corner of the viewport
+	  */
 	public function new(w:Int, h:Int, x:Int = 0, y:Int = 0)
 	{
 		renderWidth = w;
@@ -28,24 +41,44 @@ class Space4D
 		// GL.enable(GL.SCISSOR_TEST);
 	}
 	
+	/**
+	  * Call this upon changing the dimensions of
+	  * the Space4D's viewport programmatically.
+	  */
 	inline public function updateScreenRegion()
 	{
 		// GL.scissor(renderX, renderY, renderWidth, renderHeight);
 	}
 	
-	inline public function add(o:Object4D)
+	/**
+	  * Adds a 4D object to the 4D space for
+	  * further rendering.
+	  * @param	obj	4D object to add to the space
+	  */
+	inline public function add(obj:Object4D)
 	{
-		objects.push(o);
+		objects.push(obj);
 	}
 	
-	inline public function remove(o:Object4D)
+	/**
+	  * Removes a 4D object from the 4D space. Has
+	  * no effect if the object was not previously
+	  * added.
+	  * @param	obj	4D object to remove from the space
+	  */
+	inline public function remove(obj:Object4D)
 	{
-		objects.remove(o);
+		objects.remove(obj);
 	}
 	
-	inline public function attachCamera(c:Camera)
+	/**
+	  * Attach a Camera object to the space. The 4D
+	  * space is seen through the eye of this camera.
+	  * @param	cam	Camera object to use to render this space
+	  */
+	inline public function attachCamera(cam:Camera)
 	{
-		camera = c;
+		camera = cam;
 	}
 	
 	inline public function update(dt:Int)
@@ -61,6 +94,7 @@ class Space4D
 	  *   for the renderer to draw. The intersector is attached to the
 	  *   camera
 	  * - 3D rendering : actual rendering of the 3D slices
+	  * @param	gl	target OpenGL rendering context
 	  */
 	inline public function render(gl)
 	{
