@@ -42,8 +42,8 @@ class LambertMaterial extends Material
 			
 			void main()
 			{
-				float shade = max(0., dot(-normalize(position), normal)) * diffuse;
-				gl_FragColor = color * shade;
+				float shade = dot(-normalize(position), normal) * diffuse;
+				gl_FragColor = vec4(color.rgb * shade, color.a);
 			}
 		";
 	

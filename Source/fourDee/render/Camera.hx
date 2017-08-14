@@ -55,16 +55,10 @@ class Camera extends Object4D
 		{
 			var r = new ObjectSlice3D(cast(Reflect.field(obj, "material"), Material));
 			var geom:Geometry4D = Reflect.field(obj, "geometry");
-			var centroid4 = new Vector4();
-			for(v in geom.vertices)
-			{
-				centroid4.incrementBy(v);
-			}
-			centroid4.scaleBy(1 / geom.vertices.length);
-			var centroid = intersector.switchBase(centroid4);
 			var v:Array<Vector4> = geom.vertices;
 			var m = obj.rotation.makeMatrix();
 			var o = obj.position;
+			var centroid = intersector.switchBase(o);
 			for(f in geom.cells)
 			{
 				var v1 = (m * v[f.a]).add(o),
@@ -101,8 +95,8 @@ class Camera extends Object4D
 					// Tetrahedron
 					if(n.dotProduct(v4.subtract(v3)) != 0)
 					{
-						pushDirect(new Face3(0 + offset, 1 + offset, 3 + offset), centroid, r, n);
-						pushDirect(new Face3(1 + offset, 2 + offset, 3 + offset), centroid, r, n);
+						pushDirect(new Face3(0 + offset, 1 + offset, 3 + offset), centroid, r);
+						pushDirect(new Face3(1 + offset, 2 + offset, 3 + offset), centroid, r);
 					}
 				}
 			}
@@ -111,13 +105,13 @@ class Camera extends Object4D
 	}
 	
 	// Pushes a CCW-winded triangle to an object slice
-	private function pushDirect(f:Face3, centroid:Vector3, obj:ObjectSlice3D, ?_n:Vector3)
+	private function pushDirect(f:Face3, centroid:Vector3, obj:ObjectSlice3D)
 	{
 		var v1 = obj.vertices[f.a],
 			v2 = obj.vertices[f.b],
 			v3 = obj.vertices[f.c];
-		var n = _n == null ? v2.subtract(v1).crossProduct(v3.subtract(v1)) : _n;
-		if(n.dotProduct(centroid.subtract(v1)) < 0)
+		var n = v2.subtract(v1).crossProduct(v3.subtract(v1));
+		if(n.dotProduct(centroid.subtract(v1)) > 0)
 		{
 			var t = f.b;
 			f.b = f.c;
