@@ -24,17 +24,18 @@ class Main extends Application
 		// Screen width, screen height, fov in degrees
 		space4D.attachCamera(new PerspectiveCamera(90, window.width / window.height));
 		
-		hcube = new Mesh4D(new BoxGeometry4D(1, 1, 1, 1), new LambertMaterial(0xff0000, 2));
+		hcube = new Mesh4D(new BoxGeometry4D(1, 1, 1, 1), new LambertMaterial(0xff0000, 1));
 		// hcube = new Mesh4D(new BoxGeometry4D(1, 1, 1, 1), new SolidMaterial(0xff0000));
 		space4D.add(hcube);
 		hcube.position.z = -5;
 		
 		var GL = lime.graphics.opengl.GL;
+		GL.enable(GL.CULL_FACE);
 	}
 	
 	override public function update(dt:Int)
 	{
-		// hcube.rotation.xw -= dt / 1000;
+		hcube.rotation.xw -= dt / 1000;
 		hcube.rotation.xy -= dt / 1000;
 		hcube.rotation.xz += dt / 1000;
 		super.update(dt);
