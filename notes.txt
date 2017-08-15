@@ -1,0 +1,5 @@
+- Find a way to make textures a thing : mapped to cells ? faces ? behaviour of a textured slice ?
+- When that's done, bump maps should follow
+- Make it possible to insert 3D objects in the scene, in a way that is consistent with the idea of 4D space and what's implemented so far
+- Same for HUD elements
+- Most environment features found in a 3D engine I guess : skyboxes, lensflares etc
