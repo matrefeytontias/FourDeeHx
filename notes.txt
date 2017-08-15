@@ -2,4 +2,6 @@
 - When that's done, bump maps should follow
 - Make it possible to insert 3D objects in the scene, in a way that is consistent with the idea of 4D space and what's implemented so far
 - Same for HUD elements
-- Most environment features found in a 3D engine I guess : skyboxes, lensflares etc
+- Most environment features found in a 3D engine I guess : skyboxes etc
+- Work out backcell culling with 4D cross product
+- Work out 4D isotropic lighting : equivalent 3D isotropic light in the intersector ? Idea : try from 3D to 2D first and generalize
