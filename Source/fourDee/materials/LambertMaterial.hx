@@ -10,6 +10,12 @@ import lime.graphics.opengl.GLBuffer;
 import lime.graphics.opengl.GLUniformLocation;
 import lime.math.Matrix4;
 
+/**
+  * Material with basic lighting capabilities. Applies
+  * a Lambert model, where the illumination of a pixel
+  * is relative to the angle between the face's normal
+  * and the direction to the light source.
+  */
 class LambertMaterial extends Material
 {
 	inline static private var lambertVert =
@@ -53,6 +59,10 @@ class LambertMaterial extends Material
 	private var glUColor:GLUniformLocation;
 	private var glUDiffuse:GLUniformLocation;
 	
+	/**
+	  * @param	c	color of the material
+	  * @param	d	diffusion coefficient
+	  */
 	public function new(c:Int, d:Float = 1.)
 	{
 		super(lambertVert, lambertFrag);

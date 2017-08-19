@@ -3,11 +3,17 @@ package fourDee.render;
 import lime.math.Matrix4;
 import lime.utils.Float32Array;
 
+/**
+  * Camera that implements perspective projection.
+  */
 class PerspectiveCamera extends Camera
 {
 	private var dNear:Float;
 	
-	// FOV is in degrees ; aspect ratio is width / height
+	/**
+	  * @param	fov			field of view in degress
+	  * @param	aspectRatio	ratio between the width and the height of the viewport
+	  */
 	public function new(fov:Float, aspectRatio:Float)
 	{
 		super();

@@ -10,6 +10,11 @@ import lime.graphics.opengl.GLBuffer;
 import lime.graphics.opengl.GLUniformLocation;
 import lime.math.Matrix4;
 
+/**
+  * Material with a solid color ; does not take
+  * any lighting into account and does not cast
+  * shadows.
+  */
 class SolidMaterial extends Material
 {
 	inline static private var solidVert =
@@ -36,10 +41,16 @@ class SolidMaterial extends Material
 			}
 		";
 	
+	/**
+	  * Solid color of the material.
+	  */
 	public var color:Int;
 	
 	private var glUColor:GLUniformLocation;
 	
+	/**
+	  * @param	c	color of the material
+	  */
 	public function new(c:Int)
 	{
 		super(solidVert, solidFrag);

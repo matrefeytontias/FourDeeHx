@@ -25,9 +25,19 @@ class Camera extends Object4D
 {
 	private var intersector:Intersector = new Intersector();
 	
+	/**
+	  * 3D rotation of the camera in the base of the intersector.
+	  */
 	public var rotation3D:Euler3 = new Euler3();
 	
+	/**
+	  * Projection matrix of the camera.
+	  */
 	public var pmat:Matrix4 = new Matrix4();
+	/**
+	  * Matrix form of the rotation3D field. This is
+	  * updated on each `update` call.
+	  */
 	public var matrix3D:Matrix4 = new Matrix4();
 	
 	public function new()
@@ -49,6 +59,12 @@ class Camera extends Object4D
 		return m;
 	}
 	
+	/**
+	  * Calculates the 3D slice of an Object4D, and pushes it to an
+	  * output array.
+	  * @param	obj	Object4D to slice
+	  * @param	out	array of ObjectSlice3D to fill
+	  */
 	public function intersect(obj:Object4D, out:Array<ObjectSlice3D>)
 	{
 		if(obj.renderable)

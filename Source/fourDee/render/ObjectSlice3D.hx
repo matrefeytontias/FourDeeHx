@@ -9,17 +9,30 @@ import lime.utils.Float32Array;
 
 using fourDee.render.ObjectSlice3D;
 
-// Container class for bunches of 3D, ready-to-render triangles.
-// Basically a way to display the result of the intersector's operation.
-// They are flushed as soon as the intersector changes direction or origin.
+/**
+  * Container class for bunches of 3D, ready-to-render triangles.
+  * Used as a way to display the result of the intersector's operation,
+  * meaning that those are 3D objects, with 3D coordinates expressed in
+  * the intersector's base.
+  * They are flushed as soon as the intersector changes direction or origin.
+  */
 class ObjectSlice3D
 {
 	private var glBuffer:GLBuffer;
 	
+	/**
+	  * Vertices of the object.
+	  */
 	public var vertices:Array<Vector3>;
+	/**
+	  * Triangular faces of the object.
+	  */
 	public var faces:Array<Face3>;
 	// True for edge smoothing : TODO
 	public var interpolateNormals:Bool = false;
+	/**
+	  * Material used to render this slice.
+	  */
 	public var material:Material;
 	
 	public function new(?v, ?f, ?m)

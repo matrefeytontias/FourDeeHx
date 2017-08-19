@@ -8,7 +8,8 @@ import fourDee.ds.Either;
   */
 abstract Vector4D(Either<Vector3, Vector4>)
 {
-	public var E(get, never):Either<Vector3, Vector4>;
+	@:allow(fourDee.math.Intersector)
+	private var E(get, never):Either<Vector3, Vector4>;
 	private function get_E() : Either<Vector3, Vector4>
 	{
 		return this;

@@ -2,6 +2,9 @@ package fourDee.math;
 
 import haxe.ds.Vector;
 
+/**
+  * Designates 4D rotation planes.
+  */
 enum Rotation4D
 {
 	XY;
@@ -12,6 +15,10 @@ enum Rotation4D
 	ZW;
 }
 
+/**
+  * 5x5 square matrix. Used to hold 4D affine transformations,
+  * such as rotation, translation and scaling.
+  */
 @:forward(toArray)
 abstract Matrix5(Vector<Float>)
 {
@@ -21,6 +28,10 @@ abstract Matrix5(Vector<Float>)
 		return new Matrix5(v);
 	}
 	
+	/**
+	  * @param	v	Vector of 25 floats to fill the matrix with (optional)
+	  * @param	e	Array of 25 floats to fill the matrix with (optional)
+	  */
 	inline public function new(?v:Vector<Float>, ?e:Array<Float>)
 	{
 		if(v == null)
@@ -41,6 +52,12 @@ abstract Matrix5(Vector<Float>)
 		else throw "new Matrix5: initialization vector must contain 25 values";
 	}
 	
+	/**
+	  * Term-by-term addition ; does not change the current matrix.
+	  * Use as + operator.
+	  * @param	b	matrix to add to the current one
+	  * @return	new Matrix5 containing the result of the operation
+	  */
 	@:op(A + B) inline public function add(b:Matrix5) : Matrix5
 	{
 		var r = new Matrix5();
@@ -49,6 +66,13 @@ abstract Matrix5(Vector<Float>)
 		return r;
 	}
 	
+	/**
+	  * Applies the transformations described by the matrix to
+	  * a Vector4 object. Use as * operator between a Matrix5
+	  * and a Vector4, in that order.
+	  * @param	v	Vector4 to apply the matrix to
+	  * @return	a new Vector4 that is the result of the operation
+	  */
 	@:op(A * B) public function applyToVec4(v:Vector4) : Vector4
 	{
 		var temp = new Vector4();
@@ -62,6 +86,10 @@ abstract Matrix5(Vector<Float>)
 		return temp;
 	}
 	
+	/**
+	  * Returns a copy of the matrix.
+	  * @return	a copy of the matrix
+	  */
 	public function clone() : Matrix5
 	{
 		return new Matrix5(this.toArray());
@@ -72,6 +100,9 @@ abstract Matrix5(Vector<Float>)
 		return this.get(i);
 	}
 	
+	/**
+	  * Sets the matrix to the 5x5 identity.
+	  */
 	public function identity() : Matrix5
 	{
 		this[0] = this[6] = this[12] = this[18] = this[24] = 1.;
@@ -82,6 +113,12 @@ abstract Matrix5(Vector<Float>)
 		return this;
 	}
 	
+	/**
+	  * Sets this matrix to be a specific 4D rotation.
+	  * @param	r		rotation plane used to set this matrix
+	  * @param	theta	angle of the rotation
+	  * @return	this matrix after being set to the rotation
+	  */
 	public function makeRotation(r:Rotation4D, theta:Float) : Matrix5
 	{
 		identity();
@@ -108,6 +145,13 @@ abstract Matrix5(Vector<Float>)
 		return this;
 	}
 	
+	/**
+	  * Performs matrix multiplication between two Matrix5. The
+	  * operation is non-commutative.
+	  * Use as * operator between two Matrix5.
+	  * @param	b	other matrix
+	  * @return	new Matrix5 containing the result of the operation
+	  */
 	@:op(A * B) public function multiply(b:Matrix5) : Matrix5
 	{
 		var r = new Matrix5();
@@ -124,6 +168,10 @@ abstract Matrix5(Vector<Float>)
 		return r;
 	}
 	
+	/**
+	  * Negates all the cells of the matrix.
+	  * @return this matrix after negation
+	  */
 	inline public function negate() : Matrix5
 	{
 		for(k in 0 ... 25)
@@ -131,11 +179,28 @@ abstract Matrix5(Vector<Float>)
 		return this;
 	}
 	
+	/**
+	  * Post-multiplies a Vector4 by the matrix, effectively
+	  * applying the transposed matrix to the vector. Use as
+	  * * operator, between a Vector4 and a Matrix5 in that
+	  * order.
+	  * @param	v	Vector4 operand
+	  * @param	m	Matrix5 operand
+	  *	@return	a new Vector4 containing the result of the operation
+	  */
 	@:op(A * B) inline static public function postMultiply(v:Vector4, m:Matrix5) : Vector4
 	{
 		return m.transposed() * v;
 	}
 	
+	/**
+	  * Appends a scale operation to the matrix.
+	  * @param	x	scale along the X axis
+	  * @param	y	scale along the Y axis
+	  * @param	z	scale along the Z axis
+	  * @param	w	scale along the W axis
+	  * @return	this matrix after the scale operation
+	  */
 	inline public function scale(x = 1., y = 1., z = 1., w = 1.) : Matrix5
 	{
 		this[0] *= x;
@@ -164,6 +229,14 @@ abstract Matrix5(Vector<Float>)
 		return r;
 	}
 	
+	/**
+	  * Appends a translation operation to the matrix.
+	  * @param	x	translation along the X axis
+	  * @param	y	translation along the Y axis
+	  * @param	z	translation along the Z axis
+	  * @param	w	translation along the W axis
+	  * @return this matrix after the translation operation
+	  */
 	inline public function translate(x = 0., y = 0., z = 0., w = 0.) : Matrix5
 	{
 		this[4] += x;
@@ -173,16 +246,32 @@ abstract Matrix5(Vector<Float>)
 		return this;
 	}
 	
+	/**
+	  * Appends a translation given by a Vector4 to the
+	  * matrix.
+	  * @param	v	Vector4 describing the translation
+	  * @return this matrix after the translation operation
+	  */
 	@:op(A + B) inline public function translateVec(v:Vector4) : Matrix5
 	{
 		return translate(v.x, v.y, v.z, v.w);
 	}
 	
+	/**
+	  * Appends a translation given by the negation of a
+	  * Vector4 to the matrix.
+	  * @param	v	Vector4 describing the translation
+	  * @return this matrix after the translation operation
+	  */
 	@:op(A - B) inline public function translateMinusVec(v:Vector4) : Matrix5
 	{
 		return translate(-v.x, -v.y, -v.z, -v.w);
 	}
 	
+	/**
+	  * Transposes the matrix in-place.
+	  * @return	this matrix after the transpose operation
+	  */
 	public function transpose() : Matrix5
 	{
 		var t:Float;
@@ -198,6 +287,11 @@ abstract Matrix5(Vector<Float>)
 		return this;
 	}
 	
+	/**
+	  * Return the transposed matrix. This does not
+	  * modify the matrix.
+	  * @return	the transposed matrix.
+	  */
 	public function transposed() : Matrix5
 	{
 		var r = new Matrix5();
@@ -213,6 +307,11 @@ abstract Matrix5(Vector<Float>)
 		return r;
 	}
 	
+	/**
+	  * Returns the negation of the matrix. This does
+	  * not modify the matrix. Use as unary - operator.
+	  * @return	the negation of the matrix
+	  */
 	@:op(-A) public function unaryNeg() : Matrix5
 	{
 		var r = new Matrix5();

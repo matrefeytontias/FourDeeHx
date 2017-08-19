@@ -3,6 +3,10 @@ package fourDee.geometries;
 import fourDee.math.Vector3;
 import fourDee.render.Face3;
 
+/**
+  * Geometry4D for a 4D hypercube of given
+  * width, height, depth and duth.
+  */
 class BoxGeometry4D extends Geometry4D
 {
 	static private var cubeFaces = [ new Face3(0, 1, 2), new Face3(0, 2, 3),
@@ -13,6 +17,12 @@ class BoxGeometry4D extends Geometry4D
 		new Face3(1, 0, 4), new Face3(1, 4, 5)
 	];
 	
+	/**
+	  * @param	w	width
+	  * @param	h	height
+	  * @param	d	depth
+	  * @param	du	duth ; "length" along the 4th axis
+	  */
 	public function new(w:Float, h:Float, d:Float, du:Float)
 	{
 		super();

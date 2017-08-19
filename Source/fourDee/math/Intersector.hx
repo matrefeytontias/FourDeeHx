@@ -1,6 +1,9 @@
 package fourDee.math;
 
-// 3D hyperplane to intersect 4D space with
+/**
+  * Helper class to calculate the intersection between
+  * a 3D hyperplane and a tetrahedron lying in 4D space.
+  */
 class Intersector
 {
 	private var ux:Vector4;
@@ -20,7 +23,19 @@ class Intersector
 		// "e" term of the cartesian equation
 		e = -normal.dot(origin);
 	}
-
+	
+	/**
+	  * Switches the expression of a 4D point as being either
+	  * in canonical 4D space, or in the base of the current
+	  * hyperplane. Specifically, if the input is a Vector3,
+	  * the return value is a Vector4 containing the 4D
+	  * coordinates of that point as expressed in the hyperplane's
+	  * base ; if the input is a Vector4, the return value is a
+	  * Vector3 containing the projection of the vector onto the
+	  * hyperplane expressed in its own base.
+	  * @param	vector	Vector3 or Vector4 object
+	  * @return	Vector4 or Vector3 object as described above
+	  */
 	public function switchBase(vector:Vector4D) : Vector4D
 	{
 		switch(vector.E)
@@ -56,8 +71,12 @@ class Intersector
 	}
 	*/
 
-	// This updates the plane's equation's e factor, so the origin
-	// needs to be updated BEFORE this gets called
+	/**
+	  * Apply a Matrix5 to the hyperplane's axis system.
+	  * This updates the plane's equation's internal factor,
+	  * so the origin needs to be updated BEFORE this is called.
+	  * @param	m	Matrix5 object describing the transformation
+	  */
 	public function applyMatrix5(m:Matrix5)
 	{
 		ux = m * ux;
@@ -84,8 +103,18 @@ class Intersector
 		return u.scaleBy(t).add(v1);
 	}
 
-	// The intersection of a 3-hyperplane and a geom3 is either nothing,
-	// one of the vertices, one of the edges, a triangle or the whole thing
+	/**
+	  * Calculates the intersection between the hyperplane
+	  * and a tetrahedron lying in 4D space. The intersection
+	  * of a 3-hyperplane and a tetrahedron is either nothing,
+	  * one of the vertices, one of the edges, a triangle or
+	  * a tetrahedron.
+	  * @param	v1	1st vertex of the tetrahedron
+	  * @param	v2	2nd vertex of the tetrahedron
+	  * @param	v3	3rd vertex of the tetrahedron
+	  * @param	v4	4th vertex of the tetrahedron
+	  * @return	array of intersected vertices
+	  */
 	public function intersectTetra(v1:Vector4, v2:Vector4, v3:Vector4, v4:Vector4) : Array<Vector4>
 	{
 		// First case : the hyperplane doesn't intersect with the geom3
