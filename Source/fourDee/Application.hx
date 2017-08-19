@@ -2,6 +2,7 @@ package fourDee;
 
 import lime.graphics.Renderer;
 import lime.graphics.GLRenderContext;
+import lime.graphics.opengl.GL;
 import lime.ui.Window;
 
 /**
@@ -24,7 +25,6 @@ class Application extends lime.app.Application
 				switch(renderer.context)
 				{
 					case OPENGL(gl):
-						space4D.gl = gl;
 					default:
 						throw "Renderer is not OpenGL ; aborting";
 				}
@@ -40,10 +40,32 @@ class Application extends lime.app.Application
 		return space4D;
 	}
 	
+	/**
+	  * Background color of the application.
+	  */
+	public var color(default, set):Int = 0;
+	private function set_color(v:Int) : Int
+	{
+		GL.clearColor((v >> 16) / 255, ((v >> 8) & 0xff) / 255, (v & 0xff) / 255, alpha);
+		return color = v;
+	}
+	
+	/**
+	  * Alpha value of the background color.
+	  */
+	public var alpha(default, set):Float = 1.;
+	private function set_alpha(v:Float) : Float
+	{
+		alpha = Math.min(1, Math.max(0, v));
+		color = color; // update background alpha
+		return alpha;
+	}
+	
 	public function new()
 	{
 		super();
 		space4D = null;
+		GL.clearColor(0, 0, 0, 1);
 	}
 	
 	override public function onWindowCreate(window:Window)
@@ -71,6 +93,7 @@ class Application extends lime.app.Application
 		{
 			case OPENGL(gl):
 				gl.viewport(0, 0, window.width, window.height);
+				gl.clear(gl.COLOR_BUFFER_BIT);
 				space4D.render(gl);
 			default:
 				throw "Renderer is not OpenGL. Aborting";
