@@ -28,7 +28,7 @@ class Camera extends Object4D
 	public var rotation3D:Euler3 = new Euler3();
 	
 	public var pmat:Matrix4 = new Matrix4();
-	public var matrix3D:Matrix4;
+	public var matrix3D:Matrix4 = new Matrix4();
 	
 	public function new()
 	{

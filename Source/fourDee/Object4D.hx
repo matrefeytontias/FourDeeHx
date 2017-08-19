@@ -29,7 +29,7 @@ class Object4D
 	public var renderable(get, never):Bool;
 	private function get_renderable() : Bool
 	{
-		return Reflect.hasField(this, "geometry") && Reflect.hasField(this, "material") != null;
+		return Reflect.field(this, "geometry") != null && Reflect.field(this, "material") != null;
 	}
 	
 	private function new()
