@@ -259,7 +259,7 @@ class Vector4
 	  * @param _l	target length
 	  * @return	this vector
 	  */
-	inline public function normalize(_l:Float = 1.) : Float
+	inline public function normalize(_l:Float = 1.) : Vector4
 	{
 		var l = length;
 		if(l != 0)
@@ -270,7 +270,7 @@ class Vector4
 			z *= nl;
 			w *= nl;
 		}
-		return l;
+		return this;
 	}
 	
 	/**

@@ -68,11 +68,13 @@ class Geometry4D
 			var c1 = new Cell4(a, c, e, d),
 				c2 = new Cell4(b, e, c, a),
 				c3 = new Cell4(c, e, f, d);
-			if(f3.isTextured)
+			if(face.isTextured)
 			{
-				c1.ta = f3.ta; c1.tb = f3.tc; c1.tc = f3.tb; c1.td = f3.ta;
-				c2.ta = f3.tb; c2.tb = f3.tb; c2.tc = f3.tc; c2.td = f3.ta;
-				c3.ta = f3.tc; c3.tb = f3.tb; c3.tc = f3.tc; c3.td = f3.ta;
+				// Texture extrusion along W ; give the same texture coordinates from 3D to 4D,
+				// but modulo d : a -> a, b -> b, c -> c, a -> d, b -> e, c -> f
+				c1.ta = face.ta; c1.tb = face.tc; c1.tc = face.tb; c1.td = face.ta;
+				c2.ta = face.tb; c2.tb = face.tb; c2.tc = face.tc; c2.td = face.ta;
+				c3.ta = face.tc; c3.tb = face.tb; c3.tc = face.tc; c3.td = face.ta;
 			}
 			cells.push(c1);
 			cells.push(c2);
@@ -88,9 +90,9 @@ class Geometry4D
 	{
 		for(c in cells)
 		{
-			c.normal = Vector4.crossProduct4D(vertices[c.b].subtract(vertices[c.a]),
-				vertices[c.c].subtract(vertices[c.a]),
-				vertices[c.d].subtract(vertices[c.a])).normalize();
+			c.normal = Vector4.crossProduct4D(vertices[c.b].sub(vertices[c.a]),
+				vertices[c.c].sub(vertices[c.a]),
+				vertices[c.d].sub(vertices[c.a])).normalize();
 		}
 	}
 }
