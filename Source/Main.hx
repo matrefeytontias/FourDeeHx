@@ -2,6 +2,7 @@ import fourDee.Application;
 import fourDee.Space4D;
 import fourDee.geometries.BoxGeometry4D;
 import fourDee.materials.*;
+import fourDee.math.Vector4;
 import fourDee.objects.Mesh4D;
 import fourDee.render.PerspectiveCamera;
 
@@ -30,6 +31,21 @@ class Main extends Application
 		
 		var GL = lime.graphics.opengl.GL;
 		GL.enable(GL.CULL_FACE);
+		
+		var v = hcube.geometry.vertices,
+			v1 = v[0],
+			v2 = v[1],
+			v3 = v[2],
+			v4 = Vector4.crossProduct4D(v1, v2, v3);
+		
+		trace(v4);
+		trace(v1.dot(v4), v2.dot(v4), v3.dot(v4));
+	}
+	
+	override public function onWindowResize(window:Window, width:Int, height:Int)
+	{
+		super.onWindowResize(window, width, height);
+		cast(space4D.camera, PerspectiveCamera).updateAspectRatio(width / height);
 	}
 	
 	override public function update(dt:Int)

@@ -24,7 +24,7 @@ class Space4D
 	private var objects:Array<Object4D> = new Array<Object4D>();
 	private var slices:Array<ObjectSlice3D> = new Array<ObjectSlice3D>();
 	
-	private var camera:Camera;
+	public var camera(default, null):Camera;
 	
 	/**
 	  * @param	w	width in pixels of the viewport
