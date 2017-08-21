@@ -40,6 +40,34 @@ class Vector4
 	public var w:Float;
 	
 	/**
+	  * Component swizzling. Returns Vector3's based on the
+	  * order of the components.
+	  */
+	public var xyz(get, never):Vector3;
+	private function get_xyz() : Vector3
+	{
+		return new Vector3(x, y, z);
+	}
+	
+	public var xyw(get, never):Vector3;
+	private function get_xyw() : Vector3
+	{
+		return new Vector3(x, y, w);
+	}
+	
+	public var xzw(get, never):Vector3;
+	private function get_xzw() : Vector3
+	{
+		return new Vector3(x, z, w);
+	}
+	
+	public var yzw(get, never):Vector3;
+	private function get_yzw() : Vector3
+	{
+		return new Vector3(y, z, w);
+	}
+	
+	/**
 	  * Squared length of the vector.
 	  */
 	public var lengthSquared(get, never):Float;
@@ -114,6 +142,22 @@ class Vector4
 		z = a.z;
 		w = a.w;
 		return this;
+	}
+	
+	/**
+	  * Computes the 4D cross product of 3 vectors. It has all
+	  * the properties of the 3D cross product of 2 vectors,
+	  * including the fact that it is orthogonal to all 3 vectors
+	  * that were used to calculate it.
+	  */
+	static public function crossProduct4D(v1:Vector4, v2:Vector4, v3:Vector4) : Vector4
+	{
+		var r = new Vector4();
+		r.x = -v3.yzw.dotProduct(v1.yzw.crossProduct(v2.yzw));
+		r.y = v3.xzw.dotProduct(v1.xzw.crossProduct(v2.xzw));
+		r.z = -v3.xyw.dotProduct(v1.xyw.crossProduct(v2.xyw));
+		r.w = v3.xyz.dotProduct(v1.xyz.crossProduct(v2.xyz));
+		return r;
 	}
 	
 	/**
