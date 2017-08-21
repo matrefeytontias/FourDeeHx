@@ -31,7 +31,9 @@ class Geometry4D
 	  * Fills the geometry using the given 3D geometry data.
 	  * The calculation carried on is an extrusion of the 3D
 	  * geometry in both directions along the W axis with the
-	  * given amplitude.
+	  * given amplitude. Interpolates texture coordinates by
+	  * extruding the texture along W, just like the triangle
+	  * is.
 	  * @param	vertices3D	array of Vector3 describing the 3D geometry
 	  * @param	faces3D		array of Face3 describing the 3D geometry
 	  * @param	duth		amplitude of the extrusion along the W axis
@@ -63,9 +65,32 @@ class Geometry4D
 			var a = face.a, b = face.b, c = face.c,
 			d = face.a + extraVertexOffset, e = face.b + extraVertexOffset, f = face.c + extraVertexOffset;
 			// Draw it if you don't believe me
-			cells.push(new Cell4(a, c, e, d));
-			cells.push(new Cell4(b, e, c, a));
-			cells.push(new Cell4(c, e, f, d));
+			var c1 = new Cell4(a, c, e, d),
+				c2 = new Cell4(b, e, c, a),
+				c3 = new Cell4(c, e, f, d);
+			if(f3.isTextured)
+			{
+				c1.ta = f3.ta; c1.tb = f3.tc; c1.tc = f3.tb; c1.td = f3.ta;
+				c2.ta = f3.tb; c2.tb = f3.tb; c2.tc = f3.tc; c2.td = f3.ta;
+				c3.ta = f3.tc; c3.tb = f3.tb; c3.tc = f3.tc; c3.td = f3.ta;
+			}
+			cells.push(c1);
+			cells.push(c2);
+			cells.push(c3);
+		}
+	}
+	
+	/**
+	  * Calculates the 4D normal vectors for the
+	  * different tetrahedric faces.
+	  */
+	public function computeNormals()
+	{
+		for(c in cells)
+		{
+			c.normal = Vector4.crossProduct4D(vertices[c.b].subtract(vertices[c.a]),
+				vertices[c.c].subtract(vertices[c.a]),
+				vertices[c.d].subtract(vertices[c.a])).normalize();
 		}
 	}
 }
