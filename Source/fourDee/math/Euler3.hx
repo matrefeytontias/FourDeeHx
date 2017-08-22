@@ -42,11 +42,11 @@ class Euler3
 	{
 		var r = new Matrix4();
 		if(x != 0)
-			r.prependRotation(x * 180 / Math.PI, Vector4.X_AXIS);
+			r.appendRotation(x * 180 / Math.PI, Vector4.X_AXIS);
 		if(y != 0)
-			r.prependRotation(y * 180 / Math.PI, Vector4.Y_AXIS);
+			r.appendRotation(y * 180 / Math.PI, Vector4.Y_AXIS);
 		if(z != 0)
-			r.prependRotation(z * 180 / Math.PI, Vector4.Z_AXIS);
+			r.appendRotation(z * 180 / Math.PI, Vector4.Z_AXIS);
 		return r;
 	}
 }
