@@ -49,4 +49,21 @@ class Euler3
 			r.appendRotation(z * 180 / Math.PI, Vector4.Z_AXIS);
 		return r;
 	}
+	
+	/**
+	  * Returns a Matrix4 object representing the inverse rotation
+	  * in 3D.
+	  * @return the inverse rotation as a Matrix4
+	  */
+	public function makeInverseMatrix() : Matrix4
+	{
+		var r = new Matrix4();
+		if(z != 0)
+			r.appendRotation(-z * 180 / Math.PI, Vector4.Z_AXIS);
+		if(y != 0)
+			r.appendRotation(-y * 180 / Math.PI, Vector4.Y_AXIS);
+		if(x != 0)
+			r.appendRotation(-x * 180 / Math.PI, Vector4.X_AXIS);
+		return r;
+	}
 }

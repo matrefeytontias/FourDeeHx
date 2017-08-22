@@ -80,7 +80,7 @@ class Euler4
 	}
 	
 	/**
-	  * Returns a Matrix5 object representing the rotatoin in 4D.
+	  * Returns a Matrix5 object representing the rotation in 4D.
 	  * @return	the rotation as a Matrix5
 	  */
 	public function makeMatrix() : Matrix5
@@ -96,6 +96,26 @@ class Euler4
 				m = m * r.makeRotation(rot, theta);
 		}
 		
-		return m + (center.sub(m * center));
+		return m + center.sub(m * center);
+	}
+	
+	/**
+	  * Returns a Matrix5 object representing the inverse rotation
+	  * in 4D.
+	  * @return	the inverse rotation as a Matrix5
+	  */
+	public function makeInverseMatrix() : Matrix5
+	{
+		var m:Matrix5 = new Matrix5(), r = new Matrix5();
+		
+		for(i in 0 ... order.length)
+		{
+			var rot = order[i];
+			var theta = getRot(rot);
+			if(theta != 0.)
+				m = m * r.makeRotation(rot, -theta);
+		}
+		
+		return m + center.sub(m * center);
 	}
 }
