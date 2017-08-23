@@ -8,6 +8,8 @@
 	
 	<haxelib name="lime" />
 	
+	<haxedef name="HXCPP_PROFILER" />
+	
 	<assets path="Assets" rename="assets" />
 	
 </project>
