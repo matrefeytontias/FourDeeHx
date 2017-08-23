@@ -6,11 +6,18 @@ import fourDee.math.Vector4;
 import fourDee.objects.Mesh4D;
 import fourDee.render.PerspectiveCamera;
 
+import lime.ui.KeyCode;
+import lime.ui.KeyModifier;
 import lime.ui.Window;
+
+#if cpp
+import cpp.vm.Profiler;
+#end
 
 class Main extends Application
 {
-	private var hcube:Mesh4D;
+	private var hcube1:Mesh4D;
+	private var hcube2:Mesh4D;
 	
 	public function new()
 	{
@@ -23,23 +30,16 @@ class Main extends Application
 		space4D = new Space4D(window.width, window.height);
 		
 		// Screen width, screen height, fov in degrees
-		space4D.attachCamera(new PerspectiveCamera(90, window.width / window.height));
+		space4D.attachCamera(new PerspectiveCamera(90, window.width / window.height, 0.1, 10));
 		
-		hcube = new Mesh4D(new BoxGeometry4D(1, 1, 1, 1), new LambertMaterial(0xff0000, 1));
-		space4D.add(hcube);
-		hcube.position.z = -5;
+		hcube1 = new Mesh4D(new BoxGeometry4D(1, 0.5, 1, 1), new LambertMaterial(0xff0000, 1));
+		hcube2 = new Mesh4D(new BoxGeometry4D(0.5, 1, 1, 1), new LambertMaterial(0x0000ff, 1));
+		space4D.add(hcube2);
+		space4D.add(hcube1);
+		hcube1.position.z = -5;
+		hcube2.position.z = -3;
 		
-		var GL = lime.graphics.opengl.GL;
-		GL.enable(GL.CULL_FACE);
-		
-		var v = hcube.geometry.vertices,
-			v1 = v[0],
-			v2 = v[1],
-			v3 = v[2],
-			v4 = Vector4.crossProduct4D(v1, v2, v3);
-		
-		trace(v4);
-		trace(v1.dot(v4), v2.dot(v4), v3.dot(v4));
+		color = 0x330000;
 	}
 	
 	override public function onWindowResize(window:Window, width:Int, height:Int)
@@ -48,11 +48,29 @@ class Main extends Application
 		cast(space4D.camera, PerspectiveCamera).updateAspectRatio(width / height);
 	}
 	
+#if cpp
+	override public function onKeyDown(window:Window, key:KeyCode, modifier:KeyModifier)
+	{
+		super.onKeyDown(window, key, modifier);
+		if(key == KeyCode.P)
+		{
+			Profiler.start("profile.log");
+			trace("Started profiling");
+		}
+		if(key == KeyCode.S)
+		{
+			Profiler.stop();
+			trace("Stopped profiling");
+		}
+	}
+#end
+	
 	override public function update(dt:Int)
 	{
-		hcube.rotation.xw -= dt / 1000;
-		// hcube.rotation.xy -= dt / 1000;
-		hcube.rotation.xz += dt / 1000;
+		hcube1.rotation.xw -= dt / 1000;
+		hcube2.rotation.xy -= dt / 1000;
+		hcube1.rotation.xz += dt / 1000;
+		hcube2.rotation.xz += dt / 1000;
 		super.update(dt);
 	}
 }
