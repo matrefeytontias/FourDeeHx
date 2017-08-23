@@ -13,12 +13,15 @@ class PerspectiveCamera extends Camera
 	/**
 	  * @param	fov			field of view in degress
 	  * @param	aspectRatio	ratio between the width and the height of the viewport
+	  * @param	near		Z coordinate of the near plane
+	  * @param	far			Z coordinate of the far plane
 	  */
-	public function new(fov:Float, aspectRatio:Float)
+	public function new(fov:Float, aspectRatio:Float, near:Float, far:Float)
 	{
 		super();
 		var d = 1 / Math.tan(fov * Math.PI / 180 / 2);
-		pmat = new Matrix4(new Float32Array([ d, 0, 0, 0, 0, d * aspectRatio, 0, 0, 0, 0, d, -1, 0, 0, 0, 0 ]));
+		var ir = 1. / (near - far);
+		pmat = new Matrix4(new Float32Array([ d, 0, 0, 0, 0, d * aspectRatio, 0, 0, 0, 0, (near + far) * ir, -1, 0, 0, 2 * near * far * ir, 0 ]));
 	}
 	
 	/**

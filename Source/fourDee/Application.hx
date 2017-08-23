@@ -65,7 +65,6 @@ class Application extends lime.app.Application
 	{
 		super();
 		space4D = null;
-		GL.clearColor(0, 0, 0, 1);
 	}
 	
 	override public function onWindowCreate(window:Window)
@@ -74,6 +73,8 @@ class Application extends lime.app.Application
 		switch(window.renderer.context)
 		{
 			case OPENGL(gl):
+				GL.enable(GL.CULL_FACE);
+				GL.enable(GL.DEPTH_TEST);
 			default:
 				throw "Renderer is not OpenGL. Aborting";
 		}
@@ -92,8 +93,8 @@ class Application extends lime.app.Application
 		switch(r.context)
 		{
 			case OPENGL(gl):
+				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 				gl.viewport(0, 0, window.width, window.height);
-				gl.clear(gl.COLOR_BUFFER_BIT);
 				space4D.render(gl);
 			default:
 				throw "Renderer is not OpenGL. Aborting";
