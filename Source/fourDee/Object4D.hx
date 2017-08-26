@@ -3,6 +3,7 @@ package fourDee;
 import fourDee.math.Euler4;
 import fourDee.math.Vector4;
 import fourDee.objects.Camera;
+import fourDee.render.RenderMethod;
 
 /**
   * Base class for 4D objects in 4D space.
@@ -21,16 +22,22 @@ class Object4D
 	  * Scaling factors along every axis.
 	  */
 	public var scale:Vector4 = new Vector4(1., 1., 1., 1.);
+	
 	/**
-	  * Whether the object can be rendered by FourDee.
+	  * Whether the object can be rendered by intersection.
 	  * This is true when the 4D object has a "geometry"
 	  * and a "material" field.
 	  */
-	public var renderable(get, never):Bool;
-	private function get_renderable() : Bool
+	public var intersectable(get, never):Bool;
+	private function get_intersectable() : Bool
 	{
 		return Reflect.field(this, "geometry") != null && Reflect.field(this, "material") != null;
 	}
+	
+	/**
+	  * Tells the engine how to render the object.
+	  */
+	public var renderMethod:RenderMethod = RenderMethod.None;
 	
 	private function new()
 	{

@@ -1,5 +1,7 @@
 package fourDee.objects;
 
+import fourDee.render.RenderMethod;
+
 /**
   * Generic 4D object, with vertices and materials.
   */
@@ -24,5 +26,6 @@ class Mesh4D extends Object4D
 		super();
 		geometry = g;
 		material = m;
+		renderMethod = RenderMethod.Intersect;
 	}
 }

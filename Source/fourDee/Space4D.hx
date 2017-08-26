@@ -84,24 +84,35 @@ class Space4D
 	inline public function update(dt:Int)
 	{
 		camera.update(dt);
+		for(o in objects)
+			o.update(dt);
 	}
 	
 	/**
 	  * Renders all the 4D objects in the space.
-	  * 4D rendering is in two major steps :
+	  * Generally speaking, 4D rendering is in two major steps :
 	  * - intersector operation : the intersector calculates the
-	  *   3D slices of the 4D objects and arranges them into 3D triangles
-	  *   for the renderer to draw. The intersector is attached to the
-	  *   camera
+	  *   3D slices of the 4D objects and arranges them into 3D
+	  *   triangles for the renderer to draw. The intersector is
+	  *   attached to the camera
 	  * - 3D rendering : actual rendering of the 3D slices
 	  * @param	gl	target OpenGL rendering context
 	  */
-	inline public function render(gl)
+	public function render(gl)
 	{
 		for(k in 0 ... slices.length)
 			slices.pop();
 		for(o in objects)
-			camera.intersect(o, slices);
+		{
+			switch(o.renderMethod)
+			{
+				case Intersect:
+					camera.intersect(o, slices);
+				case Custom(cb):
+					cb(gl, camera);
+				default: // case None:
+			}
+		}
 		for(s in slices)
 			s.render(gl, camera);
 	}

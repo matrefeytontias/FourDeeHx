@@ -69,7 +69,7 @@ class Camera extends Object4D
 	  */
 	public function intersect(obj:Object4D, out:Array<ObjectSlice3D>)
 	{
-		if(obj.renderable)
+		if(obj.intersectable)
 		{
 			var r = new ObjectSlice3D(cast(Reflect.field(obj, "material"), Material));
 			var geom:Geometry4D = Reflect.field(obj, "geometry");
