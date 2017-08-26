@@ -4,6 +4,8 @@ import fourDee.Object4D;
 import fourDee.math.Euler3;
 import fourDee.math.Intersector;
 import fourDee.math.Vector4;
+import fourDee.render.Face3;
+import fourDee.render.ObjectSlice3D;
 
 import lime.math.Matrix4;
 

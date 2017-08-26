@@ -2,6 +2,7 @@ package fourDee.render;
 
 import fourDee.Material;
 import fourDee.math.Vector3;
+import fourDee.objects.Camera;
 
 import lime.graphics.GLRenderContext;
 import lime.graphics.opengl.GLBuffer;

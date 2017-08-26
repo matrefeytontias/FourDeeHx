@@ -2,7 +2,7 @@ package fourDee;
 
 import fourDee.math.Euler4;
 import fourDee.math.Vector4;
-import fourDee.render.Camera;
+import fourDee.objects.Camera;
 
 /**
   * Base class for 4D objects in 4D space.

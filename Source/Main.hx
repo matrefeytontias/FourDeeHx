@@ -4,7 +4,7 @@ import fourDee.geometries.BoxGeometry4D;
 import fourDee.materials.*;
 import fourDee.math.Vector4;
 import fourDee.objects.Mesh4D;
-import fourDee.render.PerspectiveCamera;
+import fourDee.objects.PerspectiveCamera;
 
 import lime.ui.KeyCode;
 import lime.ui.KeyModifier;
