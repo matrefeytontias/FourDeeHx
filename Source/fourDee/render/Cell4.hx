@@ -44,10 +44,15 @@ class Cell4
 	  * space. However, just like surfaces in 3D
 	  * space, volumes have exactly two normal
 	  * vectors of opposite sign, computed with
-	  * the 4D cross product. It has all the same
-	  * properties as the "classic" normal vector.
+	  * the 4D cross product. They have all the same
+	  * properties as the "classic" normal vectors.
 	  */
-	public var normal:Vector4 = null;
+	public var normal(default, set):Vector4 = null;
+	private function set_normal(v:Vector4) : Vector4
+	{
+		v.directionalOnly = true;
+		return normal = v;
+	}
 	
 	/**
 	  * @param	a	index of the 1st vertex

@@ -1,4 +1,4 @@
-package fourDee.render;
+package fourDee.objects;
 
 import fourDee.Object4D;
 import fourDee.math.Euler3;

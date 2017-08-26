@@ -1,4 +1,4 @@
-package fourDee.render;
+package fourDee.objects;
 
 import lime.math.Matrix4;
 import lime.utils.Float32Array;
