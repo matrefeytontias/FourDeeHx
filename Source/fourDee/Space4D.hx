@@ -98,7 +98,7 @@ class Space4D
 	  * - 3D rendering : actual rendering of the 3D slices
 	  * @param	gl	target OpenGL rendering context
 	  */
-	public function render(gl)
+	public function render(gl:GLRenderContext)
 	{
 		for(k in 0 ... slices.length)
 			slices.pop();
@@ -110,7 +110,7 @@ class Space4D
 					camera.intersect(o, slices);
 				case Custom(cb):
 					cb(gl, camera);
-				default: // case None:
+				case None:
 			}
 		}
 		for(s in slices)
