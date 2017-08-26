@@ -77,6 +77,12 @@ class Vector4
 	}
 	
 	/**
+	  * If the vector should not account for translations.
+	  * This is useful notably for normal vectors.
+	  */
+	public var directionalOnly:Bool = false;
+	
+	/**
 	  * Length of the vector.
 	  */
 	public var length(get, never):Float;
@@ -149,6 +155,7 @@ class Vector4
 	  * the properties of the 3D cross product of 2 vectors,
 	  * including the fact that it is orthogonal to all 3 vectors
 	  * that were used to calculate it.
+	  * @return	a directional vector computed as the 4D cross product
 	  */
 	static public function crossProduct4D(v1:Vector4, v2:Vector4, v3:Vector4) : Vector4
 	{
@@ -157,6 +164,7 @@ class Vector4
 		r.y = v3.xzw.dotProduct(v1.xzw.crossProduct(v2.xzw));
 		r.z = -v3.xyw.dotProduct(v1.xyw.crossProduct(v2.xyw));
 		r.w = v3.xyz.dotProduct(v1.xyz.crossProduct(v2.xyz));
+		r.directionalOnly = true;
 		return r;
 	}
 	

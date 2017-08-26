@@ -76,12 +76,13 @@ abstract Matrix5(Vector<Float>)
 	@:op(A * B) public function applyToVec4(v:Vector4) : Vector4
 	{
 		var temp = new Vector4();
+		var t = v.directionalOnly ? 0. : 1.;
 		// Basically a multiplication by a Vector5 with t = 1
-		temp.x = this[0] * v.x + this[1] * v.y + this[2] * v.z + this[3] * v.w + this[4];
-		temp.y = this[5] * v.x + this[6] * v.y + this[7] * v.z + this[8] * v.w + this[9];
-		temp.z = this[10] * v.x + this[11] * v.y + this[12] * v.z + this[13] * v.w + this[14];
-		temp.w = this[15] * v.x + this[16] * v.y + this[17] * v.z + this[18] * v.w + this[19];
-		var t = this[20] * v.x + this[21] * v.y + this[22] * v.z + this[23] * v.w + this[24];
+		temp.x = this[0] * v.x + this[1] * v.y + this[2] * v.z + this[3] * v.w + this[4] * t;
+		temp.y = this[5] * v.x + this[6] * v.y + this[7] * v.z + this[8] * v.w + this[9] * t;
+		temp.z = this[10] * v.x + this[11] * v.y + this[12] * v.z + this[13] * v.w + this[14] * t;
+		temp.w = this[15] * v.x + this[16] * v.y + this[17] * v.z + this[18] * v.w + this[19] * t;
+		t = this[20] * v.x + this[21] * v.y + this[22] * v.z + this[23] * v.w + this[24] * t;
 		temp.scaleBy(1 / t);
 		return temp;
 	}
