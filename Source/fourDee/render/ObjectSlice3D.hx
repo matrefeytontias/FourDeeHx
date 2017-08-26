@@ -45,30 +45,33 @@ class ObjectSlice3D
 	
 	public function render(gl:GLRenderContext, camera:Camera)
 	{
-		var temp = new Array<Float>();
-		for(f in faces)
+		if(vertices.length > 0)
 		{
-			var v1 = vertices[f.a],
-				v2 = vertices[f.b],
-				v3 = vertices[f.c];
-			var n = v2.subtract(v1).crossProduct(v3.subtract(v1));
-			n.normalize();
-			temp.pushVec3(v1);
-			temp.pushVec3(n);
-			temp.pushVec3(v2);
-			temp.pushVec3(n);
-			temp.pushVec3(v3);
-			temp.pushVec3(n);
+			var temp = new Array<Float>();
+			for(f in faces)
+			{
+				var v1 = vertices[f.a],
+					v2 = vertices[f.b],
+					v3 = vertices[f.c];
+				var n = v2.subtract(v1).crossProduct(v3.subtract(v1));
+				n.normalize();
+				temp.pushVec3(v1);
+				temp.pushVec3(n);
+				temp.pushVec3(v2);
+				temp.pushVec3(n);
+				temp.pushVec3(v3);
+				temp.pushVec3(n);
+			}
+			
+			glBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, glBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, temp.length * 4, new Float32Array(temp), gl.STATIC_DRAW);
+			gl.bindBuffer(gl.ARRAY_BUFFER, null);
+			
+			material.setupRender(gl, this, glBuffer, camera);
+			gl.drawArrays(gl.TRIANGLES, 0, faces.length * 3);
+			material.cleanupRender(gl);
 		}
-		
-		glBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, glBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, temp.length * 4, new Float32Array(temp), gl.STATIC_DRAW);
-		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		
-		material.setupRender(gl, this, glBuffer, camera);
-		gl.drawArrays(gl.TRIANGLES, 0, faces.length * 3);
-		material.cleanupRender(gl);
 	}
 	
 	static inline private function pushVec3(a:Array<Float>, v:Vector3)
