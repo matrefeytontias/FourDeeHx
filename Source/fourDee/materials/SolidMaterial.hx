@@ -1,8 +1,7 @@
 package fourDee.materials;
 
 import fourDee.Material;
-import fourDee.objects.Box;
-import fourDee.render.Camera;
+import fourDee.objects.Camera;
 import fourDee.render.ObjectSlice3D;
 
 import lime.graphics.opengl.GL;
