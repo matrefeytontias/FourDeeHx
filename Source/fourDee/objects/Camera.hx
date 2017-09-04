@@ -62,12 +62,11 @@ class Camera extends Object4D
 	}
 	
 	/**
-	  * Calculates the 3D slice of an Object4D, and pushes it to an
-	  * output array.
+	  * Calculates the 3D slice of an Object4D.
 	  * @param	obj	Object4D to slice
-	  * @param	out	array of ObjectSlice3D to fill
+	  * @return	3D slice of the 4D object as an ObjectSlice3D
 	  */
-	public function intersect(obj:Object4D, out:Array<ObjectSlice3D>)
+	public function intersect(obj:Object4D) : ObjectSlice3D
 	{
 		if(obj.intersectable)
 		{
@@ -118,8 +117,10 @@ class Camera extends Object4D
 					}
 				}
 			}
-			out.push(r);
+			return r;
 		}
+		else
+			throw "RenderMode.Intersect object has no geometry or material";
 	}
 	
 	// Pushes a CCW-winded triangle to an object slice
@@ -128,6 +129,9 @@ class Camera extends Object4D
 		var v1 = obj.vertices[f.a],
 			v2 = obj.vertices[f.b],
 			v3 = obj.vertices[f.c];
+		var e = 0.001;
+		// if(Math.abs(v1.z - v2.z) < e && Math.abs(v1.z - v3.z) < e)
+			// trace(v1, v2, v3);
 		var n = v2.subtract(v1).crossProduct(v3.subtract(v1));
 		if(n.dotProduct(centroid.subtract(v1)) > 0)
 		{

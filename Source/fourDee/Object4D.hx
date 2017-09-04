@@ -3,6 +3,7 @@ package fourDee;
 import fourDee.math.Euler4;
 import fourDee.math.Vector4;
 import fourDee.objects.Camera;
+import fourDee.render.ObjectSlice3D;
 import fourDee.render.RenderMethod;
 
 /**
@@ -38,6 +39,15 @@ class Object4D
 	  * Tells the engine how to render the object.
 	  */
 	public var renderMethod:RenderMethod = RenderMethod.None;
+	
+	// Keep a reference to the object's 3D slice
+	@:allow(fourDee.Space4D)
+	private var slice:ObjectSlice3D = null;
+	
+	/**
+	  * Tells the engine that the 4D object has changed or moved in any way.
+	  */
+	public var dirty:Bool;
 	
 	private function new()
 	{

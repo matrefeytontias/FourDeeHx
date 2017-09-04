@@ -22,7 +22,6 @@ class Space4D
 	public var renderHeight:Int;
 	
 	private var objects:Array<Object4D> = new Array<Object4D>();
-	private var slices:Array<ObjectSlice3D> = new Array<ObjectSlice3D>();
 	
 	public var camera(default, null):Camera;
 	
@@ -100,20 +99,17 @@ class Space4D
 	  */
 	public function render(gl:GLRenderContext)
 	{
-		for(k in 0 ... slices.length)
-			slices.pop();
 		for(o in objects)
 		{
 			switch(o.renderMethod)
 			{
 				case Intersect:
-					camera.intersect(o, slices);
+					o.slice = camera.intersect(o);
+					o.slice.render(gl, camera);
 				case Custom(cb):
 					cb(gl, camera);
 				case None:
 			}
 		}
-		for(s in slices)
-			s.render(gl, camera);
 	}
 }
