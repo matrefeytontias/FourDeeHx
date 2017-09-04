@@ -42,4 +42,9 @@ class Face3
 		this.b = b;
 		this.c = c;
 	}
+	
+	public function toString() : String
+	{
+		return "Face3(" + a + ", " + b + ", " + c + ")";
+	}
 }

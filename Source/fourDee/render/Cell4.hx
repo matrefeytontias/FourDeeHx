@@ -67,4 +67,9 @@ class Cell4
 		this.c = c;
 		this.d = d;
 	}
+	
+	public function toString() : String
+	{
+		return "Cell4(" + a + ", " + b + ", " + c + ", " + d + ")";
+	}
 }
