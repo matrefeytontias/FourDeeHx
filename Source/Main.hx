@@ -33,7 +33,7 @@ class Main extends Application
 		space4D.attachCamera(new PerspectiveCamera(90, window.width / window.height, 0.1, 10));
 		
 		hcube1 = new Mesh4D(new BoxGeometry4D(1, 0.5, 1, 1), new LambertMaterial(0xff0000, 1));
-		hcube2 = new Mesh4D(new BoxGeometry4D(0.5, 1, 1, 1), new LambertMaterial(0x0000ff, 1));
+		hcube2 = new Mesh4D(new BoxGeometry4D(0.5, 1, 1, 1), new SolidMaterial(0x0000ff));
 		space4D.add(hcube2);
 		space4D.add(hcube1);
 		hcube1.position.z = -5;
