@@ -26,9 +26,9 @@ class Material
 	private var glANormal:Int;
 	private var glUMat:GLUniformLocation;
 	
-	private function new(vert:String, frag:String)
+	private function new(d:{vertex:String, fragment:String})
 	{
-		program = GLUtils.createProgram(vert, frag);
+		program = GLUtils.createProgram(d.vertex, d.fragment);
 		glAPosition = GL.getAttribLocation(program, "aPosition");
 		glANormal = GL.getAttribLocation(program, "aNormal");
 		if(glAPosition >= 0)

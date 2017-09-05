@@ -22,41 +22,43 @@ class ShaderListHelper
 	static private var current:ShaderList = null;
 	static private var length:Int = 0;
 	
+	static public var globalVars = new Array<ShaderVar>();
+	
 	inline static public function newList()
 	{
 		current = ShaderList.Output;
 		length = 1;
 	}
 	
-	static private function addNode(n:ShaderNode, v:Array<ShaderVar>)
+	static private function addNode(n:ShaderNode, v:Array<ShaderVar>) : Int
 	{
 		if(current == null)
 			throw "ShaderListHelper : no shader list was attached";
 		current = Node(n, current, v);
-        length++;
+		return length++;
 	}
 	
-	inline static public function addColor()
+	inline static public function addColor() : Int
 	{
-		addNode(ShaderNode.SolidColor, [
+		return addNode(ShaderNode.SolidColor, [
 			{ file: "frag", type:"vec4", name:"color_SC_" + length } ]);
 	}
 	
-	inline static public function addAmbientLight()
+	inline static public function addAmbientLight() : Int
 	{
 		var v = new Array<ShaderVar>();
 		v.push({ file: "frag", type: "vec4", name:"color_AL_" + length });
 		v.push({ file: "frag", type: "float", name:"strength_AL_" + length });
-		addNode(ShaderNode.AmbientLight, v);
+		return addNode(ShaderNode.AmbientLight, v);
 	}
 	
-	inline static public function addPointLight()
+	inline static public function addPointLight() : Int
 	{
 		var v = new Array<ShaderVar>();
 		v.push({ file: "frag", type: "vec4", name:"color_PL_" + length });
 		v.push({ file: "frag", type: "float", name:"strength_PL_" + length });
 		v.push({ file: "frag", type: "vec4", name:"position_PL_" + length });
-		addNode(ShaderNode.PointLight, v);
+		return addNode(ShaderNode.PointLight, v);
 	}
 	
 	static public function buildShaders() : ShaderSource
@@ -66,7 +68,7 @@ class ShaderListHelper
 			switch(l)
 			{
 				case Output:
-					accVert += "void main() {\n" + mainVert + "gl_Position = mat * vec4(position, 1.);\n}";
+					accVert += "void main() {\nvec4 position = vec4(aPosition, 1.);\n" + mainVert + "gl_Position = mat * position;\n}";
 					accFrag += "void main() {\nvec4 color = vec4(0.);\n" + mainFrag + "gl_FragColor = color;\n}";
                     return { vertex: accVert, fragment: accFrag };
 				case Node(type, next, vars):
@@ -75,14 +77,14 @@ class ShaderListHelper
 						if(Reflect.hasField(v, "file"))
 						{
 							if(v.file== "frag")
-								accFrag = 'uniform ${v.type} ${v.name};\n' + accFrag;
+								accFrag += 'uniform ${v.type} ${v.name};\n';
 							if(v.file == "vert")
-								accVert = 'uniform ${v.type} ${v.name};\n' + accVert;
+								accVert += 'uniform ${v.type} ${v.name};\n';
 						}
 						else
 						{
-							accFrag = 'varying ${v.type} ${v.name};\n' + accFrag;
-							accVert = 'varying ${v.type} ${v.name};\n' + accVert;
+							accFrag += 'varying ${v.type} ${v.name};\n';
+							accVert += 'varying ${v.type} ${v.name};\n';
 						}
 					}
 					switch(type)
@@ -99,6 +101,11 @@ class ShaderListHelper
 			};
 		}
 		
-		return build(current, "", "", "", "", length - 1);
+		return build(current, "attribute vec3 aPosition; attribute vec3 aNormal; uniform mat4 mat;\n",
+			"",
+			#if desktop "" #else "precision mediump float;" #end,
+			"",
+			length - 1
+		);
 	}
 }

@@ -64,7 +64,7 @@ class LambertMaterial extends Material
 	  */
 	public function new(c:Int, d:Float = 1.)
 	{
-		super(lambertVert, lambertFrag);
+		super({ vertex: lambertVert, fragment: lambertFrag });
 		color = c;
 		diffuse = d;
 		glUColor = GL.getUniformLocation(program, "color");

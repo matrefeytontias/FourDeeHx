@@ -3,6 +3,7 @@ package fourDee.materials;
 import fourDee.Material;
 import fourDee.objects.Camera;
 import fourDee.render.ObjectSlice3D;
+import fourDee.materials.shaders.ShaderListHelper;
 
 import lime.graphics.opengl.GL;
 import lime.graphics.opengl.GLBuffer;
@@ -20,7 +21,6 @@ class SolidMaterial extends Material
 		"
 		attribute vec3 aPosition;
 		uniform mat4 mat;
-		uniform mat4 rmat;
 		
 		void main()
 		{
@@ -52,9 +52,11 @@ class SolidMaterial extends Material
 	  */
 	public function new(c:Int)
 	{
-		super(solidVert, solidFrag);
+		ShaderListHelper.newList();
+		var index = ShaderListHelper.addColor();
+		super(ShaderListHelper.buildShaders());
 		color = c;
-		glUColor = GL.getUniformLocation(program, "color");
+		glUColor = GL.getUniformLocation(program, "color_SC_" + index);
 	}
 	
 	override public function setupRender(gl:lime.graphics.GLRenderContext, obj:ObjectSlice3D, glBuffer:GLBuffer, camera:Camera)
