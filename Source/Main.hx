@@ -10,14 +10,13 @@ import lime.ui.KeyCode;
 import lime.ui.KeyModifier;
 import lime.ui.Window;
 
-#if cpp
-import cpp.vm.Profiler;
-#end
-
 class Main extends Application
 {
+	static private var SPEED(default, never) = 0.1;
 	private var hcube1:Mesh4D;
 	private var hcube2:Mesh4D;
+
+	private var camera:PerspectiveCamera;
 	
 	public function new()
 	{
@@ -30,7 +29,8 @@ class Main extends Application
 		space4D = new Space4D(window.width, window.height);
 		
 		// Screen width, screen height, fov in degrees
-		space4D.attachCamera(new PerspectiveCamera(90, window.width / window.height, 0.1, 10));
+		camera = new PerspectiveCamera(90, window.width / window.height, 0.1, 10);
+		space4D.attachCamera(camera);
 		
 		hcube1 = new Mesh4D(new BoxGeometry4D(1, 0.5, 1, 1), new LambertMaterial(0xff0000, 1));
 		hcube2 = new Mesh4D(new BoxGeometry4D(0.5, 1, 1, 1), new LambertMaterial(0x0000ff, 1));
@@ -48,22 +48,26 @@ class Main extends Application
 		cast(space4D.camera, PerspectiveCamera).updateAspectRatio(width / height);
 	}
 	
-#if cpp
 	override public function onKeyDown(window:Window, key:KeyCode, modifier:KeyModifier)
 	{
 		super.onKeyDown(window, key, modifier);
-		if(key == KeyCode.P)
-		{
-			Profiler.start("profile.log");
-			trace("Started profiling");
-		}
+		if(key == KeyCode.Z)
+			camera.position.y += SPEED;
 		if(key == KeyCode.S)
-		{
-			Profiler.stop();
-			trace("Stopped profiling");
-		}
+			camera.position.y -= SPEED;
+		if(key == KeyCode.UP)
+			camera.position.z -= SPEED;
+		if(key == KeyCode.DOWN)
+			camera.position.z += SPEED;
+		if(key == KeyCode.RIGHT)
+			camera.position.x += SPEED;
+		if(key == KeyCode.LEFT)
+			camera.position.x -= SPEED;
+		if(key == KeyCode.NUMPAD_6)
+			camera.rotation.xz += SPEED / 2;
+		if(key == KeyCode.NUMPAD_4)
+			camera.rotation.xz -= SPEED / 2;
 	}
-#end
 	
 	override public function update(dt:Int)
 	{
