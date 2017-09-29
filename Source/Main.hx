@@ -2,6 +2,7 @@ import fourDee.Application;
 import fourDee.Space4D;
 import fourDee.geometries.BoxGeometry4D;
 import fourDee.materials.*;
+import fourDee.math.Vector3;
 import fourDee.math.Vector4;
 import fourDee.objects.Mesh4D;
 import fourDee.objects.PerspectiveCamera;
@@ -17,12 +18,14 @@ class Main extends Application
 	private var hcube2:Mesh4D;
 
 	private var camera:PerspectiveCamera;
-	private var dr:Vector4; // camera movement vector
+	private var dr:Vector3; // camera movement in the 3D hyperplane
 	
+	private var active:Bool = true;
+
 	public function new()
 	{
 		super();
-		dr = new Vector4();
+		dr = new Vector3();
 	}
 	
 	override public function onWindowCreate(window:Window)
@@ -44,6 +47,22 @@ class Main extends Application
 		color = 0x330000;
 	}
 	
+	override public function onMouseMoveRelative(window:Window, dx:Float, dy:Float)
+	{
+		camera.rotation3D.y -= dx / window.width;
+		camera.rotation3D.x -= dy / window.height;
+	}
+
+	override public function onWindowEnter(window:Window)
+	{
+		lime.ui.Mouse.lock = active = true;
+	}
+
+	override public function onWindowLeave(window:Window)
+	{
+		lime.ui.Mouse.lock = active = false;
+	}
+
 	override public function onWindowResize(window:Window, width:Int, height:Int)
 	{
 		super.onWindowResize(window, width, height);
@@ -53,24 +72,21 @@ class Main extends Application
 	override public function onKeyDown(window:Window, key:KeyCode, modifier:KeyModifier)
 	{
 		super.onKeyDown(window, key, modifier);
-		dr.setTo(0., 0., 0., 0.);
-		if(key == KeyCode.Z)
-			dr.y += SPEED;
-		if(key == KeyCode.S)
-			dr.y -= SPEED;
-		if(key == KeyCode.UP)
-			dr.z -= SPEED;
-		if(key == KeyCode.DOWN)
-			dr.z += SPEED;
-		if(key == KeyCode.RIGHT)
-			dr.x += SPEED;
-		if(key == KeyCode.LEFT)
-			dr.x -= SPEED;
-		if(key == KeyCode.NUMPAD_6)
-			camera.rotation.xz += SPEED / 2;
-		if(key == KeyCode.NUMPAD_4)
-			camera.rotation.xz -= SPEED / 2;
-		camera.position.incrementBy(camera.rotation.makeMatrix() * dr);
+		if(active)
+		{
+			if(key == KeyCode.UP)
+				dr.y += SPEED;
+			if(key == KeyCode.DOWN)
+				dr.y -= SPEED;
+			if(key == KeyCode.Z)
+				dr.z -= SPEED;
+			if(key == KeyCode.S)
+				dr.z += SPEED;
+			if(key == KeyCode.D)
+				dr.x += SPEED;
+			if(key == KeyCode.Q)
+				dr.x -= SPEED;
+		}
 	}
 	
 	override public function update(dt:Int)
@@ -81,5 +97,7 @@ class Main extends Application
 		hcube2.rotation.xy += dt / 1000;
 		hcube2.rotation.yw += dt / 1000;
 		super.update(dt);
+		camera.move3D(dr);
+		dr.setTo(0., 0., 0.);
 	}
 }
