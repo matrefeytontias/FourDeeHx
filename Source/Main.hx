@@ -17,10 +17,12 @@ class Main extends Application
 	private var hcube2:Mesh4D;
 
 	private var camera:PerspectiveCamera;
+	private var dr:Vector4; // camera movement vector
 	
 	public function new()
 	{
 		super();
+		dr = new Vector4();
 	}
 	
 	override public function onWindowCreate(window:Window)
@@ -51,30 +53,33 @@ class Main extends Application
 	override public function onKeyDown(window:Window, key:KeyCode, modifier:KeyModifier)
 	{
 		super.onKeyDown(window, key, modifier);
+		dr.setTo(0., 0., 0., 0.);
 		if(key == KeyCode.Z)
-			camera.position.y += SPEED;
+			dr.y += SPEED;
 		if(key == KeyCode.S)
-			camera.position.y -= SPEED;
+			dr.y -= SPEED;
 		if(key == KeyCode.UP)
-			camera.position.z -= SPEED;
+			dr.z -= SPEED;
 		if(key == KeyCode.DOWN)
-			camera.position.z += SPEED;
+			dr.z += SPEED;
 		if(key == KeyCode.RIGHT)
-			camera.position.x += SPEED;
+			dr.x += SPEED;
 		if(key == KeyCode.LEFT)
-			camera.position.x -= SPEED;
+			dr.x -= SPEED;
 		if(key == KeyCode.NUMPAD_6)
 			camera.rotation.xz += SPEED / 2;
 		if(key == KeyCode.NUMPAD_4)
 			camera.rotation.xz -= SPEED / 2;
+		camera.position.incrementBy(camera.rotation.makeMatrix() * dr);
 	}
 	
 	override public function update(dt:Int)
 	{
 		hcube1.rotation.xw -= dt / 1000;
-		hcube2.rotation.xy -= dt / 1000;
 		hcube1.rotation.xz += dt / 1000;
-		hcube2.rotation.xz += dt / 1000;
+		hcube2.rotation.xz -= dt / 1000;
+		hcube2.rotation.xy += dt / 1000;
+		hcube2.rotation.yw += dt / 1000;
 		super.update(dt);
 	}
 }
