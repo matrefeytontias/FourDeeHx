@@ -3,6 +3,7 @@
 	
 	<meta title="FourDee" package="com.sample.fourdee" version="1.0.0" company="Company Name" />
 	<app main="Main" path="Export" file="FourDee" />
+	<window fps="60" />
 	
 	<source path="Source" />
 	

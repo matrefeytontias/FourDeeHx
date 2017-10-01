@@ -3,6 +3,7 @@ package fourDee.objects;
 import fourDee.Object4D;
 import fourDee.math.Euler3;
 import fourDee.math.Intersector;
+import fourDee.math.Vector3;
 import fourDee.math.Vector4;
 import fourDee.render.Face3;
 import fourDee.render.ObjectSlice3D;
@@ -25,7 +26,7 @@ typedef Vector3 = lime.math.Vector4;
   */
 class Camera extends Object4D
 {
-	private var intersector:Intersector = new Intersector();
+	private var intersector:Intersector;
 	
 	/**
 	  * 3D rotation of the camera in the base of the intersector.
@@ -41,26 +42,49 @@ class Camera extends Object4D
 	  * updated on each `update` call.
 	  */
 	public var matrix3D:Matrix4 = new Matrix4();
+	/**
+	  * Inverse of the matrix3D matrix.
+	  */
+	public var invMatrix3D:Matrix4;
 	
 	public function new()
 	{
 		super();
+		intersector = new Intersector(this);
 	}
 	
 	// Calculate the matrix only once per frame
 	override public function update(dt:Int)
 	{
 		matrix3D = getMatrix3D();
+		invMatrix3D = getInvMatrix3D();
 	}
 	
 	// The camera is always the center of 3D space
 	private function getMatrix3D() : Matrix4
 	{
-		var m = rotation3D.makeMatrix();
+		var m = rotation3D.makeInverseMatrix();
 		m.appendScale(scale.x, scale.y, scale.z);
 		return m;
 	}
-	
+
+	private function getInvMatrix3D() : Matrix4
+	{
+		var m = rotation3D.makeMatrix();
+		m.prependScale(1. / scale.x, 1. / scale.y, 1. / scale.z);
+		return m;
+	}
+
+	/**
+	 * Moves the camera inside the hyperplane with a 3D movement
+	 * vector.
+	 * @param	dr	displacement vector
+	 */
+	 inline public function move3D(dr:Vector3)
+	 {
+	 	position = intersector.switchBase(invMatrix3D.transformVector(dr));
+	 }
+
 	/**
 	  * Calculates the 3D slice of an Object4D.
 	  * @param	obj	Object4D to slice
@@ -73,8 +97,9 @@ class Camera extends Object4D
 			var r = new ObjectSlice3D(cast(Reflect.field(obj, "material"), Material));
 			var geom:Geometry4D = Reflect.field(obj, "geometry");
 			var v:Array<Vector4> = geom.vertices;
-			var m = obj.rotation.makeMatrix();
-			var o = obj.position;
+			var cm = rotation.makeInverseMatrix();
+			var m = cm * obj.rotation.makeMatrix();
+			var o = (cm * obj.position.sub(position)).add(position);
 			var centroid = intersector.switchBase(o);
 			for(f in geom.cells)
 			{

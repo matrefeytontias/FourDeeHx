@@ -4,24 +4,23 @@ package fourDee.math;
   * Helper class to calculate the intersection between
   * a 3D hyperplane and a tetrahedron lying in 4D space.
   */
+@:allow(fourDee.objects.Camera)
 class Intersector
 {
 	private var ux:Vector4;
 	private var uy:Vector4;
 	private var uz:Vector4;
 	private var normal:Vector4;
-	private var origin:Vector4;
-	private var e:Float;
+
+	private var anchor:Object4D;
 	
-	public function new()
+	public function new(a:Object4D)
 	{
+		anchor = a;
 		ux = new Vector4(1, 0, 0, 0);
 		uy = new Vector4(0, 1, 0, 0);
 		uz = new Vector4(0, 0, 1, 0);
 		normal = new Vector4(0, 0, 0, 1);
-		origin = new Vector4(0, 0, 0, 0);
-		// "e" term of the cartesian equation
-		e = -normal.dot(origin);
 	}
 	
 	/**
@@ -46,9 +45,9 @@ class Intersector
 					ux.y * v.x + uy.y * v.y + uz.y * v.z,
 					ux.z * v.x + uy.z * v.y + uz.z * v.z,
 					ux.w * v.x + uy.w * v.y + uz.w * v.z
-				)).add(origin);
+				)).add(anchor.position);
 			case Right(v):
-				var nv = v.clone().sub(origin);
+				var nv = v.clone().sub(anchor.position);
 				return new Vector3(nv.dot(ux), nv.dot(uy), nv.dot(uz));
 		}
 	}
@@ -67,14 +66,14 @@ class Intersector
 			uz[coord] = Math.abs(uz[coord]) < EPSILON ? 0 : (Math.abs(1 - Math.abs(uz[coord])) < EPSILON ? Math.sign(uz[coord]) : uz[coord]);
 			normal[coord] = Math.abs(normal[coord]) < EPSILON ? 0 : (Math.abs(1 - Math.abs(normal[coord])) < EPSILON ? Math.sign(normal[coord]) : normal[coord]);
 		}
-		e = -normal.dot(origin);
+		e = -normal.dot(anchor.position);
 	}
 	*/
 
 	/**
 	  * Apply a Matrix5 to the hyperplane's axis system.
 	  * This updates the plane's equation's internal factor,
-	  * so the origin needs to be updated BEFORE this is called.
+	  * so the anchor.position needs to be updated BEFORE this is called.
 	  * @param	m	Matrix5 object describing the transformation
 	  */
 	public function applyMatrix5(m:Matrix5)
@@ -83,15 +82,14 @@ class Intersector
 		uy = m * uy;
 		uz = m * uz;
 		normal = m * normal;
-		// Update e
-		e = -normal.dot(origin);
 	}
 
 	// Cartesian equation for the hyperplane
 	// ax + by + cz + dw + e = 0
+	// with e = -normal.dot(anchor.position)
 	private function hyperplane(v:Vector4) : Float
 	{
-		return normal.dot(v) + e;
+		return normal.dot(v.sub(anchor.position));
 	}
 
 	private function lineSpaceIntersect(v1:Vector4, v2:Vector4) : Vector4
@@ -99,7 +97,7 @@ class Intersector
 		var u = v2.sub(v1);
 		u.normalize();
 		//                                         never zero
-		var t = origin.sub(v1).dot(normal) / u.dot(normal);
+		var t = anchor.position.sub(v1).dot(normal) / u.dot(normal);
 		return u.scaleBy(t).add(v1);
 	}
 
